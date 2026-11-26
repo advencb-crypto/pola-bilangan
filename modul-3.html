@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NŪMA (Number Numen) — Algebra | Modul 3: Barisan Geometri (Pola Rasio Tetap)</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+      overflow-x: hidden;
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    @keyframes revealPop {
+      0% {
+        opacity: 0;
+        transform: translateY(10px) scale(0.97);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .reveal-pop {
+      animation: revealPop 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    @keyframes amberPulse {
+      0%, 100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 0 rgba(245, 158, 11, 0));
+      }
+      50% {
+        transform: scale(1.07);
+        filter: drop-shadow(0 0 7px rgba(245, 158, 11, 0.75));
+      }
+    }
+
+    .cell-new-pulse {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: amberPulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes drawPath {
+      from {
+        stroke-dashoffset: 1200;
+      }
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    .chart-line-anim {
+      stroke-dasharray: 1200;
+      animation: drawPath 0.75s ease-out forwards;
+    }
+  </style>
+</head>
+<body class="pb-16 antialiased selection:bg-indigo-100 selection:text-indigo-900">
+
+  <!-- ======================================================================
+       1. STICKY HEADER & AUTOMATIC PROGRESS TRACKER (0% - 100%)
+       ====================================================================== -->
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      <!-- Brand Identity -->
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-indigo-950 via-indigo-600 to-violet-600 text-white flex items-center justify-center font-extrabold text-lg tracking-tight shadow-md shadow-indigo-600/20 shrink-0">
+          NŪ
+        </div>
+        <div>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-[11px] font-extrabold uppercase tracking-wider bg-indigo-100 text-indigo-800 px-2.5 py-0.5 rounded-full">
+              NŪMA — ALGEBRA • MODUL 3 DARI 5
+            </span>
+          </div>
+          <h1 class="text-base sm:text-lg font-extrabold text-indigo-950 leading-tight mt-0.5">
+            Barisan Geometri (Pola Rasio Tetap)
+          </h1>
+          <p class="text-[11px] text-slate-500 font-medium">
+            Pembelahan Sel, Pertumbuhan Eksponensial &amp; Rumus U<sub>n</sub> = a · r<sup>n−1</sup>
+          </p>
+        </div>
+      </div>
+
+      <!-- Progress Bar & Reset -->
+      <div class="flex items-center gap-2.5 flex-wrap">
+        <div class="flex items-center gap-2.5 bg-slate-100 border border-slate-200 px-3.5 py-1.5 rounded-full" title="Progres penyelesaian 4 tahap utama Modul 3">
+          <span class="text-xs font-bold text-slate-700">Progres</span>
+          <div class="w-24 h-2 bg-slate-200 rounded-full overflow-hidden">
+            <div id="progress-bar" class="h-full w-0 bg-gradient-to-r from-indigo-600 via-violet-500 to-emerald-500 rounded-full transition-all duration-500"></div>
+          </div>
+          <span id="progress-text" class="text-xs font-extrabold font-mono text-indigo-700 min-w-[34px] text-right">0%</span>
+        </div>
+
+        <button type="button" id="btn-reset-progress" class="text-xs font-bold text-slate-600 hover:text-rose-600 bg-slate-100 hover:bg-rose-50 border border-slate-200 px-3 py-1.5 rounded-full transition" title="Reset progres belajar Modul 3">
+          Reset
+        </button>
+      </div>
+    </div>
+
+    <!-- Quick-Jump Section Pills -->
+    <nav class="bg-slate-50 border-t border-slate-200 overflow-x-auto no-scrollbar" aria-label="Navigasi Tahap Modul 3">
+      <div class="max-w-6xl mx-auto px-4 py-2 flex items-center gap-2">
+        <a href="#tahap-1" id="nav-t1" class="text-xs font-semibold text-slate-600 hover:bg-indigo-100 hover:text-indigo-900 px-3 py-1.5 rounded-full whitespace-nowrap transition flex items-center gap-1.5">
+          <span class="check-badge hidden text-emerald-600 font-extrabold">✓</span>
+          <span>1. Lab Pembelahan Sel &amp; Rasio (r)</span>
+        </a>
+        <a href="#tahap-2" id="nav-t2" class="text-xs font-semibold text-slate-600 hover:bg-indigo-100 hover:text-indigo-900 px-3 py-1.5 rounded-full whitespace-nowrap transition flex items-center gap-1.5">
+          <span class="check-badge hidden text-emerald-600 font-extrabold">✓</span>
+          <span>2. Balapan Geometri vs. Aritmetika</span>
+        </a>
+        <a href="#tahap-3" id="nav-t3" class="text-xs font-semibold text-slate-600 hover:bg-indigo-100 hover:text-indigo-900 px-3 py-1.5 rounded-full whitespace-nowrap transition flex items-center gap-1.5">
+          <span class="check-badge hidden text-emerald-600 font-extrabold">✓</span>
+          <span>3. Rumus U<sub>n</sub> &amp; Mini Simulator</span>
+        </a>
+        <a href="#tahap-4" id="nav-t4" class="text-xs font-semibold text-slate-600 hover:bg-indigo-100 hover:text-indigo-900 px-3 py-1.5 rounded-full whitespace-nowrap transition flex items-center gap-1.5">
+          <span class="check-badge hidden text-emerald-600 font-extrabold">✓</span>
+          <span>4. Latihan Mandiri Adaptif</span>
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 pt-6 space-y-8">
+
+    <!-- ====================================================================
+         HERO BANNER: SELF-PACED DISCOVERY ORIENTATION
+         ==================================================================== -->
+    <section class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-950 via-indigo-800 to-violet-700 text-white p-6 sm:p-8 shadow-xl shadow-indigo-950/15">
+      <div class="absolute -right-14 -bottom-14 w-72 h-72 rounded-full bg-violet-400/20 blur-2xl pointer-events-none"></div>
+      <div class="relative z-10">
+        <div class="max-w-3xl">
+          <span class="inline-flex items-center gap-1.5 bg-white/15 border border-white/20 text-amber-300 text-xs font-bold px-3.5 py-1 rounded-full mb-3">
+            🧬 Pembelajaran Mandiri Pra-Kelas • Matematika SMP Kelas 8
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold leading-snug mb-3">
+            Dari 1 Menjadi 2, 4, 8… Temukan Kekuatan Rasio Tetap (×r) pada Barisan Geometri!
+          </h2>
+          <p class="text-sm sm:text-base text-indigo-100 leading-relaxed mb-5">
+            Berbeda dari barisan aritmetika yang bertambah/berkurang dengan penjumlahan tetap (<strong>+b</strong>), <strong>Barisan Geometri</strong> berubah karena dikali atau dibagi dengan bilangan tetap yang disebut <strong>rasio (r)</strong>. Eksplorasi 4 tahap di bawah ini sebelum masuk kelas!
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
+          <a href="#tahap-1" class="bg-white/10 hover:bg-white/15 border border-white/15 rounded-2xl p-3.5 transition block">
+            <div class="text-[11px] font-extrabold uppercase tracking-wider text-amber-300">Tahap 1</div>
+            <div class="text-sm font-bold text-white">Lab Sel &amp; Rasio</div>
+            <p class="text-xs text-indigo-200 mt-0.5">Belah sel &amp; rasio pecahan (1/2, 1/3).</p>
+          </a>
+          <a href="#tahap-2" class="bg-white/10 hover:bg-white/15 border border-white/15 rounded-2xl p-3.5 transition block">
+            <div class="text-[11px] font-extrabold uppercase tracking-wider text-emerald-300">Tahap 2</div>
+            <div class="text-sm font-bold text-white">Arena Balapan Grafik</div>
+            <p class="text-xs text-indigo-200 mt-0.5">Bandingkan laju geometri vs. aritmetika.</p>
+          </a>
+          <a href="#tahap-3" class="bg-white/10 hover:bg-white/15 border border-white/15 rounded-2xl p-3.5 transition block">
+            <div class="text-[11px] font-extrabold uppercase tracking-wider text-violet-300">Tahap 3</div>
+            <div class="text-sm font-bold text-white">Rumus &amp; Simulator</div>
+            <p class="text-xs text-indigo-200 mt-0.5">Bangun U<sub>n</sub> = a·r<sup>n−1</sup> &amp; hindari jebakan pangkat.</p>
+          </a>
+          <a href="#tahap-4" class="bg-white/10 hover:bg-white/15 border border-white/15 rounded-2xl p-3.5 transition block">
+            <div class="text-[11px] font-extrabold uppercase tracking-wider text-rose-300">Tahap 4</div>
+            <div class="text-sm font-bold text-white">Latihan Adaptif</div>
+            <p class="text-xs text-indigo-200 mt-0.5">4 soal variasi dengan pembahasan instan.</p>
+          </a>
+        </div>
+
+        <div class="pt-3.5 border-t border-white/15 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-indigo-200">
+          <span>👩‍🏫 Disusun oleh: <strong class="text-white">Lusia Adven Ningrum • Guru Matematika SMP Kelas 8</strong></span>
+          <span class="hidden sm:inline">•</span>
+          <span>✨ Sorotan <strong class="text-amber-300">Kuning Keemasan (Amber)</strong> = Sel / Bagian Baru Hasil Kali Rasio</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         2. TAHAP 1: LABORATORIUM PEMBELAHAN SEL & PENYUSUTAN RASIO (SVG)
+         ==================================================================== -->
+    <section id="tahap-1" class="scroll-mt-28 bg-white rounded-2xl border border-slate-200 p-5 sm:p-8 shadow-sm">
+      <div class="flex flex-wrap items-start justify-between gap-3 pb-4 mb-6 border-b border-slate-100">
+        <div>
+          <span class="inline-block bg-indigo-100 text-indigo-900 text-xs font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-md mb-1.5">
+            Tahap 1 • Eksplorasi Visual Rasio (r)
+          </span>
+          <h3 class="text-xl sm:text-2xl font-extrabold text-indigo-950">
+            Laboratorium Pembelahan Sel &amp; Penyusutan Rasio
+          </h3>
+        </div>
+        <span id="status-t1" class="text-xs font-bold px-3.5 py-1.5 rounded-full bg-slate-100 text-slate-600">
+          🎯 Misi: Capai U₄ &amp; jawab Micro-Check
+        </span>
+      </div>
+
+      <!-- Preset Scenarios -->
+      <div class="flex flex-wrap items-center gap-2 mb-5">
+        <button type="button" data-preset="bakteri" class="t1-preset-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold bg-indigo-600 text-white shadow-sm transition">
+          🦠 Pembelahan Bakteri (a = 1, r = 2)
+        </button>
+        <button type="button" data-preset="tigaan" class="t1-preset-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 transition">
+          🔬 Sel Tigaan (a = 3, r = 3)
+        </button>
+        <button type="button" data-preset="koloni2" class="t1-preset-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 transition">
+          🧫 Koloni Awal 2 Sel (a = 2, r = 2)
+        </button>
+        <button type="button" data-preset="setengah" class="t1-preset-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-amber-50 text-amber-950 hover:bg-amber-100 border border-amber-300 transition">
+          📄 Penyusutan / Lipatan Setengah (a = 16, r = 1/2)
+        </button>
+      </div>
+
+      <!-- Custom Parameter Controls (a & r including fractions like 1/2, 1/3) -->
+      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 mb-5">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <span class="text-xs font-extrabold uppercase tracking-wider text-indigo-700">
+            🎛️ Pengaturan Kustom Suku Pertama (a) &amp; Rasio (r)
+          </span>
+          <span class="text-xs font-mono font-bold text-slate-600">
+            Rasio <span class="text-violet-700">r = U<sub>n</sub> ÷ U<sub>n−1</sub></span>
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-white border border-slate-200 rounded-xl p-3.5">
+            <label for="t1-custom-a" class="block text-xs font-bold text-slate-700 mb-1.5">
+              Suku Pertama (<span class="font-mono text-indigo-700 font-extrabold">a</span>):
+            </label>
+            <div class="flex items-center gap-2">
+              <input type="number" id="t1-custom-a" min="1" max="64" value="1" class="w-24 px-3 py-1.5 rounded-xl border border-slate-300 font-mono text-sm font-extrabold text-center focus:outline-none focus:border-indigo-600" />
+              <span class="text-xs text-slate-500">sel / unit awal (1–64)</span>
+            </div>
+          </div>
+
+          <div class="bg-white border border-slate-200 rounded-xl p-3.5">
+            <label for="t1-custom-r" class="block text-xs font-bold text-slate-700 mb-1.5">
+              Rasio Tetap (<span class="font-mono text-violet-700 font-extrabold">r</span>):
+            </label>
+            <div class="flex flex-wrap items-center gap-2">
+              <select id="t1-custom-r" class="px-3 py-1.5 rounded-xl border border-slate-300 bg-white font-mono text-sm font-extrabold focus:outline-none focus:border-indigo-600">
+                <option value="2" selected>2 (Kali 2 lipat)</option>
+                <option value="3">3 (Kali 3 lipat)</option>
+                <option value="4">4 (Kali 4 lipat)</option>
+                <option value="0.5">1/2 (Setengah / ÷ 2)</option>
+                <option value="0.3333333333333333">1/3 (Sepertiga / ÷ 3)</option>
+                <option value="0.25">1/4 (Seperempat / ÷ 4)</option>
+              </select>
+              <span id="t1-ratio-badge" class="text-xs font-mono font-bold px-2.5 py-1 rounded-full bg-violet-100 text-violet-800">
+                r = 2
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SVG Cell / Ratio Visualization Stage -->
+      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 mb-5">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span id="t1-step-badge" class="font-mono text-xs font-extrabold bg-indigo-950 text-white px-3 py-1 rounded-full">
+              Tahap ke-1 (U₁)
+            </span>
+            <span id="t1-count-pill" class="text-xs font-extrabold px-3 py-1 rounded-full bg-emerald-100 text-emerald-800">
+              Jumlah: 1 sel
+            </span>
+          </div>
+
+          <div class="flex items-center gap-2 flex-wrap">
+            <button type="button" id="t1-prev-btn" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 disabled:opacity-40 transition">
+              ← Langkah Sebelumnya
+            </button>
+            <button type="button" id="t1-next-btn" class="px-4 py-1.5 rounded-xl text-xs font-extrabold bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm disabled:opacity-40 transition">
+              Belah / Langkah Berikutnya (+1 Suku) →
+            </button>
+            <button type="button" id="t1-reset-btn" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-200 hover:bg-slate-300 text-slate-800 transition">
+              Ulangi dari U₁
+            </button>
+          </div>
+        </div>
+
+        <div class="w-full overflow-x-auto bg-white border border-slate-200 rounded-2xl p-3">
+          <svg id="svg-cell-lab" viewBox="0 0 820 230" class="w-full min-w-[580px] h-auto select-none" role="img" aria-label="Visualisasi pembelahan sel dan penyusutan rasio barisan geometri"></svg>
+        </div>
+
+        <!-- Dynamic Sequence Observation Strip -->
+        <div class="mt-4 pt-3.5 border-t border-slate-200">
+          <div class="text-[11px] font-extrabold uppercase tracking-wider text-slate-500 mb-2">
+            Deret Pengamatan Suku (Hingga Tahap Saat Ini)
+          </div>
+          <div id="t1-sequence-strip" class="flex flex-wrap items-center gap-2 font-mono text-xs sm:text-sm"></div>
+        </div>
+      </div>
+
+      <!-- Micro-Check Question Unlocked at U4 -->
+      <div id="t1-microcheck-card" class="hidden reveal-pop bg-amber-50 border-2 border-amber-300 rounded-2xl p-5">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+          <span class="text-[11px] font-extrabold uppercase tracking-wider bg-amber-500 text-white px-2.5 py-0.5 rounded-full">
+            ⚡ Micro-Check Tahap 1 (Terbuka di U₄)
+          </span>
+          <span id="t1-mc-badge" class="text-xs font-bold text-amber-900">Uji Pemahaman Rasio</span>
+        </div>
+        <p id="t1-mc-question" class="text-xs sm:text-sm font-bold text-slate-800 mb-3"></p>
+        <div id="t1-mc-options" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-2.5"></div>
+        <p id="t1-mc-feedback" class="text-xs font-bold min-h-[18px]"></p>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         3. TAHAP 2: ARENA BALAPAN PERTUMBUHAN (GEOMETRI VS. ARITMETIKA)
+         ==================================================================== -->
+    <section id="tahap-2" class="scroll-mt-28 bg-white rounded-2xl border border-slate-200 p-5 sm:p-8 shadow-sm">
+      <div class="flex flex-wrap items-start justify-between gap-3 pb-4 mb-6 border-b border-slate-100">
+        <div>
+          <span class="inline-block bg-violet-100 text-violet-900 text-xs font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-md mb-1.5">
+            Tahap 2 • Perbandingan Pertumbuhan (U₁ s.d. U₇)
+          </span>
+          <h3 class="text-xl sm:text-2xl font-extrabold text-indigo-950">
+            Arena Balapan: Barisan Geometri vs. Barisan Aritmetika
+          </h3>
+        </div>
+        <span id="status-t2" class="text-xs font-bold px-3.5 py-1.5 rounded-full bg-slate-100 text-slate-600">
+          🎯 Misi: Atur parameter atau bandingkan grafik U₁–U₇
+        </span>
+      </div>
+
+      <p class="text-xs sm:text-sm text-slate-700 leading-relaxed mb-5">
+        Di awal (suku pertama atau kedua), <strong>Barisan Aritmetika</strong> sering kali terlihat lebih besar atau menyaingi. Namun perhatikan apa yang terjadi ketika langkahnya diteruskan sampai <strong>U<sub>7</sub></strong>: perkalian berulang (<strong>×r</strong>) membuat barisan geometri melesat jauh melampaui penjumlahan tetap (<strong>+b</strong>)!
+      </p>
+
+      <!-- Adjustable Parameters for Race Comparison -->
+      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 mb-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div>
+          <label for="t2-param-a" class="block text-xs font-bold text-slate-700 mb-1">
+            Suku Awal Bersama (<span class="font-mono text-indigo-700">a</span>):
+          </label>
+          <input type="number" id="t2-param-a" min="1" max="20" value="2" class="w-full px-3 py-1.5 rounded-xl border border-slate-300 bg-white font-mono text-sm font-extrabold focus:outline-none focus:border-indigo-600" />
+        </div>
+        <div>
+          <label for="t2-param-r" class="block text-xs font-bold text-slate-700 mb-1">
+            Rasio Geometri (<span class="font-mono text-violet-700">r</span>):
+          </label>
+          <select id="t2-param-r" class="w-full px-3 py-1.5 rounded-xl border border-slate-300 bg-white font-mono text-sm font-extrabold focus:outline-none focus:border-violet-600">
+            <option value="2" selected>r = 2 (× 2)</option>
+            <option value="3">r = 3 (× 3)</option>
+            <option value="4">r = 4 (× 4)</option>
+          </select>
+        </div>
+        <div>
+          <label for="t2-param-b" class="block text-xs font-bold text-slate-700 mb-1">
+            Beda Aritmetika (<span class="font-mono text-emerald-700">b</span>):
+          </label>
+          <input type="number" id="t2-param-b" min="1" max="50" value="10" class="w-full px-3 py-1.5 rounded-xl border border-slate-300 bg-white font-mono text-sm font-extrabold focus:outline-none focus:border-emerald-600" />
+        </div>
+      </div>
+
+      <!-- SVG Chart + Side-by-Side Comparison Table -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 mb-6 items-start">
+        <div class="lg:col-span-7 bg-slate-50 border border-slate-200 rounded-2xl p-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+            <span class="text-xs font-extrabold uppercase tracking-wider text-indigo-950">
+              Grafik Pertumbuhan U₁ → U₇
+            </span>
+            <div class="flex items-center gap-3 text-xs font-bold">
+              <span class="inline-flex items-center gap-1.5 text-violet-700">
+                <span class="w-3 h-3 rounded-full bg-violet-600 inline-block"></span> Geometri (×r)
+              </span>
+              <span class="inline-flex items-center gap-1.5 text-emerald-700">
+                <span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span> Aritmetika (+b)
+              </span>
+            </div>
+          </div>
+
+          <div class="w-full overflow-x-auto bg-white border border-slate-200 rounded-xl p-2">
+            <svg id="svg-growth-chart" viewBox="0 0 520 270" class="w-full min-w-[420px] h-auto select-none" role="img" aria-label="Grafik perbandingan pertumbuhan barisan geometri dan barisan aritmetika dari U1 sampai U7"></svg>
+          </div>
+          <p id="t2-crossover-note" class="text-xs font-semibold text-slate-700 mt-2.5"></p>
+        </div>
+
+        <div class="lg:col-span-5 overflow-x-auto rounded-2xl border border-slate-200">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="bg-indigo-950 text-white">
+                <th class="py-2.5 px-3">Suku</th>
+                <th class="py-2.5 px-3 text-right text-violet-200">Geometri</th>
+                <th class="py-2.5 px-3 text-right text-emerald-200">Aritmetika</th>
+              </tr>
+            </thead>
+            <tbody id="t2-comparison-tbody" class="divide-y divide-slate-200 font-mono"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Insight Card: Efek Lipatan Kertas & Pembelahan -->
+      <div class="rounded-2xl bg-gradient-to-r from-violet-50 via-indigo-50 to-amber-50 border border-violet-200 p-4 sm:p-5">
+        <div class="flex items-start gap-3">
+          <span class="text-2xl shrink-0">📄</span>
+          <div class="text-xs sm:text-sm text-slate-800 space-y-1.5 leading-relaxed">
+            <h4 class="font-extrabold text-indigo-950 text-sm sm:text-base">
+              Fakta Mengejutkan: Efek Lipatan Kertas &amp; Pembelahan Berulang
+            </h4>
+            <p>
+              Bayangkan selembar kertas tipis (tebal awal ±0,1 mm) dilipat dua terus-menerus: lipatan ke-1 menjadi <strong>2 lapis</strong>, lipatan ke-2 menjadi <strong>4 lapis</strong>, lipatan ke-10 menjadi <strong>1.024 lapis</strong> (±10,2 cm), dan jika secara matematis diteruskan hingga lipatan ke-42, ketebalannya melampaui jarak Bumi ke Bulan! Inilah ciri khas pertumbuhan eksponensial pada barisan geometri.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         4. TAHAP 3: PENEMUAN RUMUS Un = a · r^(n-1) & MINI SIMULATOR
+         ==================================================================== -->
+    <section id="tahap-3" class="scroll-mt-28 bg-white rounded-2xl border border-slate-200 p-5 sm:p-8 shadow-sm">
+      <div class="flex flex-wrap items-start justify-between gap-3 pb-4 mb-6 border-b border-slate-100">
+        <div>
+          <span class="inline-block bg-indigo-100 text-indigo-900 text-xs font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-md mb-1.5">
+            Tahap 3 • Konstruksi Rumus &amp; Simulasi
+          </span>
+          <h3 class="text-xl sm:text-2xl font-extrabold text-indigo-950">
+            Menemukan Rumus U<sub>n</sub> = a · r<sup>n−1</sup> &amp; Mini Simulator
+          </h3>
+        </div>
+        <span id="status-t3" class="text-xs font-bold px-3.5 py-1.5 rounded-full bg-slate-100 text-slate-600">
+          🎯 Misi: Hitung minimal 1 suku di Mini Simulator
+        </span>
+      </div>
+
+      <!-- Guided Discovery Table -->
+      <p class="text-xs sm:text-sm text-slate-700 leading-relaxed mb-4">
+        Sama seperti panah loncatan pada barisan aritmetika, untuk sampai ke suku ke-<strong>n</strong> dari suku pertama (<strong>a</strong>), kita mengalikan dengan rasio <strong>r</strong> sebanyak <strong>(n − 1) kali</strong>. Amati tabel penemuan berikut:
+      </p>
+
+      <div class="overflow-x-auto rounded-2xl border border-slate-200 mb-5">
+        <table class="w-full text-left border-collapse text-xs sm:text-sm">
+          <thead>
+            <tr class="bg-indigo-950 text-white">
+              <th class="py-3 px-3.5">Suku ke-n</th>
+              <th class="py-3 px-3.5 text-center">Banyak Perkalian r</th>
+              <th class="py-3 px-3.5">Bentuk Perkalian Berulang</th>
+              <th class="py-3 px-3.5">Rumus Pangkat</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200 font-mono">
+            <tr class="hover:bg-indigo-50/50">
+              <td class="py-2.5 px-3.5 font-extrabold text-indigo-950">U<sub>1</sub> (n = 1)</td>
+              <td class="py-2.5 px-3.5 text-center"><span class="px-2.5 py-0.5 rounded-full bg-slate-100 font-bold">0 kali</span></td>
+              <td class="py-2.5 px-3.5 text-slate-700">a</td>
+              <td class="py-2.5 px-3.5 font-bold text-indigo-700">a · r<sup>1−1</sup> = a · r<sup>0</sup> = a</td>
+            </tr>
+            <tr class="hover:bg-indigo-50/50">
+              <td class="py-2.5 px-3.5 font-extrabold text-indigo-950">U<sub>2</sub> (n = 2)</td>
+              <td class="py-2.5 px-3.5 text-center"><span class="px-2.5 py-0.5 rounded-full bg-violet-100 text-violet-800 font-bold">1 kali</span></td>
+              <td class="py-2.5 px-3.5 text-slate-700">a × r</td>
+              <td class="py-2.5 px-3.5 font-bold text-indigo-700">a · r<sup>2−1</sup> = a · r<sup>1</sup></td>
+            </tr>
+            <tr class="hover:bg-indigo-50/50">
+              <td class="py-2.5 px-3.5 font-extrabold text-indigo-950">U<sub>3</sub> (n = 3)</td>
+              <td class="py-2.5 px-3.5 text-center"><span class="px-2.5 py-0.5 rounded-full bg-violet-100 text-violet-800 font-bold">2 kali</span></td>
+              <td class="py-2.5 px-3.5 text-slate-700">a × r × r</td>
+              <td class="py-2.5 px-3.5 font-bold text-indigo-700">a · r<sup>3−1</sup> = a · r<sup>2</sup></td>
+            </tr>
+            <tr class="hover:bg-indigo-50/50">
+              <td class="py-2.5 px-3.5 font-extrabold text-indigo-950">U<sub>4</sub> (n = 4)</td>
+              <td class="py-2.5 px-3.5 text-center"><span class="px-2.5 py-0.5 rounded-full bg-violet-100 text-violet-800 font-bold">3 kali</span></td>
+              <td class="py-2.5 px-3.5 text-slate-700">a × r × r × r</td>
+              <td class="py-2.5 px-3.5 font-bold text-indigo-700">a · r<sup>4−1</sup> = a · r<sup>3</sup></td>
+            </tr>
+            <tr class="bg-indigo-50/70">
+              <td class="py-2.5 px-3.5 font-extrabold text-indigo-950">U<sub>n</sub> (umum)</td>
+              <td class="py-2.5 px-3.5 text-center"><span class="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 font-extrabold">(n − 1) kali</span></td>
+              <td class="py-2.5 px-3.5 text-slate-800 font-bold">a × r × r × ... (n−1 faktor r)</td>
+              <td class="py-2.5 px-3.5 font-extrabold text-violet-700">U<sub>n</sub> = a · r<sup>n−1</sup></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Explicit Anti-Misconception Callout -->
+      <div class="rounded-2xl bg-rose-50 border-2 border-rose-200 p-4 sm:p-5 mb-6">
+        <div class="flex items-start gap-3">
+          <span class="text-xl shrink-0">⚠️</span>
+          <div class="text-xs sm:text-sm text-rose-950 space-y-1.5 leading-relaxed">
+            <h4 class="font-extrabold text-rose-900">
+              Peringatan Anti-Miskonsepsi: Hitung Pangkat r<sup>n−1</sup> Dulu, Baru Kalikan dengan a!
+            </h4>
+            <p>
+              Pada rumus <span class="font-mono font-extrabold bg-white px-2 py-0.5 rounded border border-rose-200">U<sub>n</sub> = a · r<sup>n−1</sup></span>, pangkat <strong>(n − 1)</strong> hanya menempel pada <strong>r</strong>, bukan pada <strong>(a · r)</strong>!
+            </p>
+            <p class="font-mono text-xs bg-white/90 border border-rose-200 rounded-xl p-2.5 text-slate-800">
+              Contoh salah kaprah: Untuk a = 2, r = 3, cari U₄ → JANGAN hitung (2 × 3)³ = 6³ = 216! <br />
+              Yang benar: U₄ = 2 × 3<sup>4−1</sup> = 2 × 3³ = 2 × 27 = <strong>54</strong>.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Mini Simulator -->
+      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <span class="text-xs font-extrabold uppercase tracking-wider text-indigo-700">
+            🧮 Mini Simulator Perhitungan Suku ke-n
+          </span>
+          <label class="inline-flex items-center gap-2 bg-amber-100 border border-amber-300 px-3 py-1 rounded-full cursor-pointer select-none">
+            <input type="checkbox" id="sim-test-first" class="accent-amber-600 w-4 h-4 cursor-pointer" />
+            <span class="text-xs font-extrabold text-amber-950">Uji Tebakan Saya Dulu</span>
+          </label>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label for="sim-a" class="block text-xs font-bold text-slate-700 mb-1">Suku Pertama (a):</label>
+            <input type="number" id="sim-a" value="3" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white font-mono text-sm font-extrabold focus:outline-none focus:border-indigo-600" />
+          </div>
+          <div>
+            <label for="sim-r" class="block text-xs font-bold text-slate-700 mb-1">Rasio (r):</label>
+            <select id="sim-r" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white font-mono text-sm font-extrabold focus:outline-none focus:border-indigo-600">
+              <option value="2" selected>2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="0.5">1/2 (0,5)</option>
+              <option value="0.25">1/4 (0,25)</option>
+            </select>
+          </div>
+          <div>
+            <label for="sim-n" class="block text-xs font-bold text-slate-700 mb-1">Urutan Suku (n = 1 s.d. 12):</label>
+            <input type="number" id="sim-n" min="1" max="12" value="6" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white font-mono text-sm font-extrabold focus:outline-none focus:border-indigo-600" />
+          </div>
+        </div>
+
+        <!-- Optional Student Prediction Box -->
+        <div id="sim-prediction-row" class="hidden bg-amber-50 border border-amber-300 rounded-xl p-3.5">
+          <label for="sim-user-guess" class="block text-xs font-bold text-amber-950 mb-1.5">
+            Ketik hasil tebakanmu untuk U<sub>n</sub> (boleh angka desimal/pecahan seperti 0.5 atau 192):
+          </label>
+          <div class="flex flex-wrap items-center gap-2">
+            <input type="text" id="sim-user-guess" placeholder="Tebakan U_n..." class="w-40 px-3 py-1.5 rounded-xl border border-amber-400 bg-white font-mono text-sm font-extrabold focus:outline-none focus:border-indigo-600" />
+            <button type="button" id="sim-check-guess-btn" class="px-4 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-extrabold text-xs transition">
+              Cek &amp; Tampilkan Langkah
+            </button>
+            <span id="sim-guess-fb" class="text-xs font-bold"></span>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <button type="button" id="sim-calc-btn" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs sm:text-sm shadow-sm transition">
+            Hitung Langkah Demi Langkah
+          </button>
+        </div>
+
+        <div id="sim-steps-output" class="bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 font-mono text-xs sm:text-sm space-y-1.5"></div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         5. TAHAP 4: LATIHAN MANDIRI ADAPTIF & NAVIGASI SERI MODUL
+         ==================================================================== -->
+    <section id="tahap-4" class="scroll-mt-28 bg-white rounded-2xl border border-slate-200 p-5 sm:p-8 shadow-sm">
+      <div class="flex flex-wrap items-start justify-between gap-3 pb-4 mb-6 border-b border-slate-100">
+        <div>
+          <span class="inline-block bg-emerald-100 text-emerald-900 text-xs font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-md mb-1.5">
+            Tahap 4 • Uji Pemahaman Mandiri
+          </span>
+          <h3 class="text-xl sm:text-2xl font-extrabold text-indigo-950">
+            Latihan Mandiri Adaptif Barisan Geometri
+          </h3>
+        </div>
+        <span id="status-t4" class="text-xs font-bold px-3.5 py-1.5 rounded-full bg-slate-100 text-slate-600">
+          🎯 Misi: Jawab benar minimal 3 dari 4 soal
+        </span>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-5">
+        <p class="text-xs sm:text-sm text-slate-700">
+          Latihan ini mencakup identifikasi rasio (termasuk rasio pecahan/menyusut), penentuan U<sub>n</sub>, soal cerita pembelahan sel, dan deteksi kesalahan urutan operasi pangkat.
+        </p>
+        <button type="button" id="btn-regen-t4" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-extrabold text-xs sm:text-sm shadow-sm transition shrink-0">
+          🎲 Buat Variasi Soal Baru
+        </button>
+      </div>
+
+      <!-- 4 Practice Items -->
+      <div id="t4-quiz-list" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-7"></div>
+
+      <!-- Module Series Navigation Cards -->
+      <div class="pt-6 border-t border-slate-200">
+        <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-3">
+          Peta Navigasi Rangkaian Modul NŪMA — Algebra (Kelas VIII)
+        </h4>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <a href="index.html" class="group p-3.5 rounded-2xl border border-slate-200 hover:border-indigo-500 bg-slate-50 hover:bg-indigo-50/70 transition block">
+            <div class="text-[11px] font-extrabold text-slate-500 uppercase">← Modul 1</div>
+            <div class="text-sm font-extrabold text-indigo-950 group-hover:text-indigo-700 mt-0.5">Konsep &amp; Pola Objek</div>
+            <div class="text-xs text-slate-500 mt-0.5">Noktah, suku U<sub>n</sub> &amp; pola dasar.</div>
+          </a>
+
+          <a href="modul-2.html" class="group p-3.5 rounded-2xl border border-slate-200 hover:border-indigo-500 bg-slate-50 hover:bg-indigo-50/70 transition block">
+            <div class="text-[11px] font-extrabold text-slate-500 uppercase">← Modul 2</div>
+            <div class="text-sm font-extrabold text-indigo-950 group-hover:text-indigo-700 mt-0.5">Barisan Aritmetika</div>
+            <div class="text-xs text-slate-500 mt-0.5">Selisih tetap (+b / −b) &amp; simulator.</div>
+          </a>
+
+          <a href="modul-4.html" class="group p-3.5 rounded-2xl border border-indigo-200 hover:border-violet-500 bg-indigo-50/60 hover:bg-violet-50/80 transition block">
+            <div class="text-[11px] font-extrabold text-violet-700 uppercase">Lanjut • Modul 4 →</div>
+            <div class="text-sm font-extrabold text-indigo-950 group-hover:text-violet-800 mt-0.5">Pola Bilangan Khusus</div>
+            <div class="text-xs text-slate-600 mt-0.5">Fibonacci, Pascal &amp; bertingkat.</div>
+          </a>
+
+          <a href="modul-5.html" class="group p-3.5 rounded-2xl border border-indigo-200 hover:border-emerald-500 bg-indigo-50/60 hover:bg-emerald-50/80 transition block">
+            <div class="text-[11px] font-extrabold text-emerald-700 uppercase">Lanjut • Modul 5 →</div>
+            <div class="text-sm font-extrabold text-indigo-950 group-hover:text-emerald-800 mt-0.5">Literasi Numerasi</div>
+            <div class="text-xs text-slate-600 mt-0.5">Kursi aula, ubin &amp; kasus nyata.</div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="max-w-6xl mx-auto px-4 pt-8 text-center text-xs text-slate-500">
+    <strong>NŪMA (Number Numen) — Algebra</strong> • Dikembangkan oleh <strong>Lusia Adven Ningrum</strong> • Media Pembelajaran Mandiri Matematika SMP Kelas 8.
+  </footer>
+
+  <!-- ======================================================================
+       INTERACTIVE JAVASCRIPT ENGINE
+       ====================================================================== -->
+  <script>
+    (function () {
+      "use strict";
+
+      const STORAGE_KEY = "numa_mod3_geometri_v1";
+
+      const defaultState = {
+        doneT1: false,
+        doneT2: false,
+        doneT3: false,
+        doneT4: false,
+        mcSolved: false
+      };
+
+      let state = loadState();
+
+      function loadState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          return raw ? { ...defaultState, ...JSON.parse(raw) } : { ...defaultState };
+        } catch (err) {
+          return { ...defaultState };
+        }
+      }
+
+      function saveState() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch (err) {
+          // Ignore storage restrictions
+        }
+      }
+
+      /* --------------------------------------------------------------------
+         1. PROGRESS TRACKER (0% - 100%)
+         -------------------------------------------------------------------- */
+      function refreshProgress() {
+        const doneArr = [state.doneT1, state.doneT2, state.doneT3, state.doneT4];
+        const pct = Math.round((doneArr.filter(Boolean).length / 4) * 100);
+
+        document.getElementById("progress-bar").style.width = pct + "%";
+        document.getElementById("progress-text").textContent = pct + "%";
+
+        const map = [
+          { done: state.doneT1, statusId: "status-t1", navId: "nav-t1", goal: "🎯 Misi: Capai U₄ & jawab Micro-Check" },
+          { done: state.doneT2, statusId: "status-t2", navId: "nav-t2", goal: "🎯 Misi: Atur parameter atau bandingkan grafik U₁–U₇" },
+          { done: state.doneT3, statusId: "status-t3", navId: "nav-t3", goal: "🎯 Misi: Hitung minimal 1 suku di Mini Simulator" },
+          { done: state.doneT4, statusId: "status-t4", navId: "nav-t4", goal: "🎯 Misi: Jawab benar minimal 3 dari 4 soal" }
+        ];
+
+        map.forEach((m) => {
+          const st = document.getElementById(m.statusId);
+          const nv = document.getElementById(m.navId);
+          const chk = nv ? nv.querySelector(".check-badge") : null;
+
+          if (m.done) {
+            st.textContent = "✅ Selesai";
+            st.className = "text-xs font-bold px-3.5 py-1.5 rounded-full bg-emerald-100 text-emerald-800";
+            if (chk) chk.classList.remove("hidden");
+            if (nv) nv.classList.add("bg-emerald-50", "text-emerald-800");
+          } else {
+            st.textContent = m.goal;
+            st.className = "text-xs font-bold px-3.5 py-1.5 rounded-full bg-slate-100 text-slate-600";
+            if (chk) chk.classList.add("hidden");
+            if (nv) nv.classList.remove("bg-emerald-50", "text-emerald-800");
+          }
+        });
+
+        saveState();
+      }
+
+      function completeStage(key) {
+        if (!state[key]) {
+          state[key] = true;
+          refreshProgress();
+        }
+      }
+
+      document.getElementById("btn-reset-progress").addEventListener("click", () => {
+        state = { ...defaultState };
+        document.getElementById("t1-mc-feedback").textContent = "";
+        refreshProgress();
+        renderCellLab();
+        generateQuiz();
+      });
+
+      /* --------------------------------------------------------------------
+         2. TAHAP 1: LABORATORIUM PEMBELAHAN SEL & PENYUSUTAN RASIO (SVG)
+         -------------------------------------------------------------------- */
+      let labA = 1;
+      let labR = 2;
+      let labRatioLabel = "2";
+      let labStep = 1;
+      const labMaxStep = 6;
+
+      function formatNum(val) {
+        if (Math.abs(val - Math.round(val)) < 1e-9) {
+          return String(Math.round(val));
+        }
+        return Number(val.toFixed(4)).toLocaleString("id-ID", { maximumFractionDigits: 4 });
+      }
+
+      function termAtStep(a, r, step) {
+        return a * Math.pow(r, step - 1);
+      }
+
+      function updateRatioBadge() {
+        const badge = document.getElementById("t1-ratio-badge");
+        badge.textContent = `r = ${labRatioLabel}`;
+      }
+
+      function renderCellLab() {
+        const svg = document.getElementById("svg-cell-lab");
+        const stepBadge = document.getElementById("t1-step-badge");
+        const countPill = document.getElementById("t1-count-pill");
+        const prevBtn = document.getElementById("t1-prev-btn");
+        const nextBtn = document.getElementById("t1-next-btn");
+        const strip = document.getElementById("t1-sequence-strip");
+
+        const currentVal = termAtStep(labA, labR, labStep);
+        const prevVal = labStep > 1 ? termAtStep(labA, labR, labStep - 1) : null;
+
+        stepBadge.textContent = `Tahap ke-${labStep} (U${labStep})`;
+        countPill.textContent = `Nilai Suku U${labStep}: ${formatNum(currentVal)}`;
+        prevBtn.disabled = labStep <= 1;
+        nextBtn.disabled = labStep >= labMaxStep;
+
+        // Build SVG visualization:
+        // If r < 1 (fractional decay/folding), show shrinking/dividing bar segments + cells.
+        // If r >= 1 (growth/division), show cells/organisms with newly formed ones highlighted in amber pulse.
+        const isFractional = labR < 1;
+        let svgMarkup = `
+          <rect x="12" y="12" width="796" height="206" rx="18" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5" />
+        `;
+
+        if (isFractional) {
+          // Visualize proportional bar / shrinking segments
+          const denom = Math.round(1 / labR);
+          const segments = Math.min(24, Math.max(1, Math.round(currentVal)));
+          const barX = 55;
+          const barY = 58;
+          const barW = 710;
+          const barH = 56;
+          const ratioWidth = Math.max(24, barW * Math.pow(labR, labStep - 1));
+
+          svgMarkup += `
+            <text x="55" y="40" font-family="Plus Jakarta Sans, sans-serif" font-size="13" font-weight="800" fill="#0f172a">
+              Visualisasi Penyusutan Rasio (×${labRatioLabel} setiap langkah • ${denom} bagian per tahap)
+            </text>
+            <rect x="${barX}" y="${barY}" width="${barW}" height="${barH}" rx="12" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="2" />
+            <rect x="${barX}" y="${barY}" width="${ratioWidth}" height="${barH}" rx="12"
+                  fill="${labStep > 1 ? "#f59e0b" : "#4f46e5"}" class="${labStep > 1 ? "cell-new-pulse" : ""}" />
+            <text x="${barX + ratioWidth / 2}" y="${barY + 34}" text-anchor="middle"
+                  font-family="JetBrains Mono, monospace" font-size="15" font-weight="800" fill="#ffffff">
+              U${labStep} = ${formatNum(currentVal)}
+            </text>
+          `;
+
+          // Also render small discrete units if integer-like
+          const dotCount = Math.min(16, Math.max(1, Math.round(currentVal)));
+          for (let i = 0; i < dotCount; i++) {
+            const cx = 72 + i * 44;
+            const cy = 162;
+            svgMarkup += `
+              <circle cx="${cx}" cy="${cy}" r="14" fill="${labStep > 1 ? "#f59e0b" : "#6366f1"}" stroke="#ffffff" stroke-width="2.5" />
+              <text x="${cx}" y="${cy + 4}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" font-weight="800" fill="#ffffff">
+                ${i + 1}
+              </text>
+            `;
+          }
+          if (segments > 16) {
+            svgMarkup += `<text x="765" y="166" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="12" font-weight="800" fill="#475569">+${segments - 16} lagi</text>`;
+          }
+        } else {
+          // Multiplicative cell division grid (up to 48 visible cells)
+          const totalCells = Math.max(1, Math.round(currentVal));
+          const displayCount = Math.min(48, totalCells);
+          const cols = displayCount <= 6 ? displayCount : displayCount <= 16 ? 8 : 12;
+          const rows = Math.ceil(displayCount / cols);
+          const cellR = rows > 3 ? 13 : rows > 2 ? 16 : 20;
+          const gapX = Math.min(68, Math.floor(720 / Math.max(1, cols)));
+          const gapY = Math.min(54, Math.floor(145 / Math.max(1, rows)));
+          const startX = 410 - ((cols - 1) * gapX) / 2;
+          const startY = 52;
+
+          svgMarkup += `
+            <text x="36" y="30" font-family="Plus Jakarta Sans, sans-serif" font-size="12" font-weight="800" fill="#334155">
+              ${labStep === 1
+                ? `Populasi Awal (U₁ = ${formatNum(currentVal)} sel)`
+                : `Setelah dikali rasio r = ${labRatioLabel} dari U${labStep - 1} (${formatNum(prevVal)} → ${formatNum(currentVal)} sel)`}
+            </text>
+          `;
+
+          for (let idx = 0; idx < displayCount; idx++) {
+            const rIdx = Math.floor(idx / cols);
+            const cIdx = idx % cols;
+            const cx = startX + cIdx * gapX;
+            const cy = startY + rIdx * gapY;
+
+            // Highlight newly generated cells in amber pulse after step 1
+            const isNew = labStep > 1 && (prevVal === null || idx >= Math.min(displayCount, Math.round(prevVal)));
+            const fillColor = isNew ? "#f59e0b" : "#4f46e5";
+
+            svgMarkup += `
+              <g class="${isNew ? "cell-new-pulse" : ""}">
+                <circle cx="${cx}" cy="${cy}" r="${cellR}" fill="${fillColor}" stroke="#ffffff" stroke-width="2.5" />
+                <circle cx="${cx - cellR * 0.25}" cy="${cy - cellR * 0.2}" r="${Math.max(3, cellR * 0.25)}" fill="rgba(255,255,255,0.45)" />
+              </g>
+            `;
+          }
+
+          if (totalCells > displayCount) {
+            svgMarkup += `
+              <text x="410" y="206" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" font-weight="800" fill="#b45309">
+                Menampilkan ${displayCount} dari ${formatNum(totalCells)} sel (total eksponensial penuh = ${formatNum(totalCells)})
+              </text>
+            `;
+          }
+        }
+
+        svg.innerHTML = svgMarkup;
+
+        // Update sequence observation strip from U1 to labStep
+        let stripHtml = "";
+        for (let s = 1; s <= labStep; s++) {
+          const val = termAtStep(labA, labR, s);
+          const isCurrent = s === labStep;
+          stripHtml += `
+            <span class="px-3 py-1.5 rounded-xl border ${isCurrent
+              ? "bg-amber-100 border-amber-400 text-amber-950 font-extrabold"
+              : "bg-white border-slate-200 text-indigo-950 font-bold"}">
+              U<sub>${s}</sub> = ${formatNum(val)}
+            </span>
+          `;
+          if (s < labStep) {
+            stripHtml += `<span class="text-xs font-extrabold text-violet-600">×(${labRatioLabel})</span>`;
+          }
+        }
+        strip.innerHTML = stripHtml;
+
+        // Unlock Micro-Check upon reaching U4
+        if (labStep >= 4) {
+          renderMicroCheck();
+        }
+      }
+
+      function renderMicroCheck() {
+        const card = document.getElementById("t1-microcheck-card");
+        const qEl = document.getElementById("t1-mc-question");
+        const optEl = document.getElementById("t1-mc-options");
+        const fbEl = document.getElementById("t1-mc-feedback");
+
+        card.classList.remove("hidden");
+
+        const u4Val = termAtStep(labA, labR, 4);
+        const u5Val = termAtStep(labA, labR, 5);
+        const wrong1 = termAtStep(labA, labR, 4) + (labR >= 1 ? labR : 1);
+        const wrong2 = labA * 5;
+        const wrong3 = termAtStep(labA, labR, 3);
+
+        const choices = Array.from(new Set([
+          formatNum(u5Val),
+          formatNum(wrong1),
+          formatNum(wrong2),
+          formatNum(wrong3)
+        ])).slice(0, 4);
+
+        if (!choices.includes(formatNum(u5Val))) {
+          choices[0] = formatNum(u5Val);
+        }
+
+        qEl.innerHTML = `Jika saat ini U<sub>4</sub> = <span class="font-mono text-indigo-700">${formatNum(u4Val)}</span> dan rasio tetapnya <span class="font-mono text-violet-700">r = ${labRatioLabel}</span>, berapakah nilai suku berikutnya (<strong>U<sub>5</sub></strong>)?`;
+        fbEl.textContent = "";
+
+        optEl.innerHTML = "";
+        choices.forEach((optText) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "px-3.5 py-2 rounded-xl border border-amber-300 bg-white hover:bg-amber-100 text-left font-mono text-xs sm:text-sm font-extrabold text-slate-800 transition";
+          btn.textContent = `U₅ = ${optText}`;
+          btn.addEventListener("click", () => {
+            if (optText === formatNum(u5Val)) {
+              fbEl.className = "text-xs font-bold text-emerald-700";
+              fbEl.textContent = `✅ Tepat! ${formatNum(u4Val)} × (${labRatioLabel}) = ${formatNum(u5Val)}. Tahap 1 selesai!`;
+              state.mcSolved = true;
+              completeStage("doneT1");
+            } else {
+              fbEl.className = "text-xs font-bold text-rose-600";
+              fbEl.textContent = `❌ Belum tepat. Kalikan U₄ (${formatNum(u4Val)}) dengan rasio (${labRatioLabel}).`;
+            }
+          });
+          optEl.appendChild(btn);
+        });
+      }
+
+      document.querySelectorAll(".t1-preset-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".t1-preset-btn").forEach((b) => {
+            b.className = "t1-preset-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 transition";
+          });
+          btn.className = "t1-preset-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold bg-indigo-600 text-white shadow-sm transition";
+
+          const p = btn.dataset.preset;
+          if (p === "bakteri") { labA = 1; labR = 2; labRatioLabel = "2"; }
+          if (p === "tigaan") { labA = 3; labR = 3; labRatioLabel = "3"; }
+          if (p === "koloni2") { labA = 2; labR = 2; labRatioLabel = "2"; }
+          if (p === "setengah") { labA = 16; labR = 0.5; labRatioLabel = "1/2"; }
+
+          labStep = 1;
+          document.getElementById("t1-custom-a").value = labA;
+          updateRatioBadge();
+          renderCellLab();
+        });
+      });
+
+      document.getElementById("t1-custom-a").addEventListener("change", (e) => {
+        labA = Math.max(1, Math.min(64, Number(e.target.value) || 1));
+        e.target.value = labA;
+        labStep = 1;
+        renderCellLab();
+      });
+
+      document.getElementById("t1-custom-r").addEventListener("change", (e) => {
+        const sel = e.target;
+        labR = Number(sel.value);
+        const txt = sel.options[sel.selectedIndex].textContent;
+        labRatioLabel = txt.split(" ")[0];
+        labStep = 1;
+        updateRatioBadge();
+        renderCellLab();
+      });
+
+      document.getElementById("t1-prev-btn").addEventListener("click", () => {
+        if (labStep > 1) {
+          labStep -= 1;
+          renderCellLab();
+        }
+      });
+
+      document.getElementById("t1-next-btn").addEventListener("click", () => {
+        if (labStep < labMaxStep) {
+          labStep += 1;
+          renderCellLab();
+        }
+      });
+
+      document.getElementById("t1-reset-btn").addEventListener("click", () => {
+        labStep = 1;
+        renderCellLab();
+      });
+
+      /* --------------------------------------------------------------------
+         3. TAHAP 2: ARENA BALAPAN GEOMETRI VS. ARITMETIKA (U1 - U7)
+         -------------------------------------------------------------------- */
+      let raceTouchCount = 0;
+
+      function renderGrowthRace() {
+        const aVal = Math.max(1, Math.min(20, Number(document.getElementById("t2-param-a").value) || 2));
+        const rVal = Number(document.getElementById("t2-param-r").value) || 2;
+        const bVal = Math.max(1, Math.min(50, Number(document.getElementById("t2-param-b").value) || 10));
+
+        const indices = [1, 2, 3, 4, 5, 6, 7];
+        const geoVals = indices.map((n) => aVal * Math.pow(rVal, n - 1));
+        const ariVals = indices.map((n) => aVal + (n - 1) * bVal);
+
+        // Populate comparison table
+        const tbody = document.getElementById("t2-comparison-tbody");
+        tbody.innerHTML = indices.map((n, idx) => {
+          const g = geoVals[idx];
+          const ar = ariVals[idx];
+          const gLeads = g > ar;
+          return `
+            <tr class="${gLeads ? "bg-violet-50/40" : ""}">
+              <td class="py-2 px-3 font-extrabold text-indigo-950">U<sub>${n}</sub></td>
+              <td class="py-2 px-3 text-right font-bold ${gLeads ? "text-violet-700" : "text-slate-700"}">${formatNum(g)}</td>
+              <td class="py-2 px-3 text-right font-bold text-emerald-700">${formatNum(ar)}</td>
+            </tr>
+          `;
+        }).join("");
+
+        // Find crossover point
+        let crossoverText = "";
+        const firstGeoLead = indices.find((_, idx) => geoVals[idx] > ariVals[idx]);
+        if (firstGeoLead) {
+          crossoverText = `🚀 Barisan Geometri mulai melampaui Barisan Aritmetika pada suku ke-${firstGeoLead} (U${firstGeoLead}: Geometri = ${formatNum(geoVals[firstGeoLead - 1])} vs Aritmetika = ${formatNum(ariVals[firstGeoLead - 1])}).`;
+        } else {
+          crossoverText = `📊 Pada rentang U₁–U₇ dengan parameter saat ini, Aritmetika masih memimpin; coba naikkan rasio r atau perbesar n!`;
+        }
+        document.getElementById("t2-crossover-note").textContent = crossoverText;
+
+        // Render SVG line/dot chart
+        const svg = document.getElementById("svg-growth-chart");
+        const maxVal = Math.max(...geoVals, ...ariVals, 10);
+        const plotLeft = 58;
+        const plotRight = 495;
+        const plotTop = 24;
+        const plotBottom = 228;
+        const plotW = plotRight - plotLeft;
+        const plotH = plotBottom - plotTop;
+
+        const xPos = (i) => plotLeft + (i / (indices.length - 1)) * plotW;
+        const yPos = (val) => plotBottom - (val / maxVal) * plotH;
+
+        let chartHtml = `
+          <!-- Horizontal grid lines -->
+          <line x1="${plotLeft}" y1="${plotBottom}" x2="${plotRight}" y2="${plotBottom}" stroke="#94a3b8" stroke-width="2" />
+          <line x1="${plotLeft}" y1="${plotTop}" x2="${plotLeft}" y2="${plotBottom}" stroke="#94a3b8" stroke-width="2" />
+          <line x1="${plotLeft}" y1="${plotTop + plotH * 0.5}" x2="${plotRight}" y2="${plotTop + plotH * 0.5}" stroke="#e2e8f0" stroke-dasharray="4 4" />
+          <line x1="${plotLeft}" y1="${plotTop}" x2="${plotRight}" y2="${plotTop}" stroke="#e2e8f0" stroke-dasharray="4 4" />
+
+          <text x="${plotLeft - 8}" y="${plotBottom + 4}" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="10" fill="#64748b">0</text>
+          <text x="${plotLeft - 8}" y="${plotTop + plotH * 0.5 + 4}" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="10" fill="#64748b">${formatNum(maxVal / 2)}</text>
+          <text x="${plotLeft - 8}" y="${plotTop + 4}" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="10" fill="#64748b">${formatNum(maxVal)}</text>
+        `;
+
+        // X-axis labels U1..U7
+        indices.forEach((n, i) => {
+          chartHtml += `
+            <text x="${xPos(i)}" y="${plotBottom + 20}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" font-weight="800" fill="#334155">
+              U${n}
+            </text>
+          `;
+        });
+
+        // Arithmetic polyline & dots
+        const ariPoints = ariVals.map((v, i) => `${xPos(i)},${yPos(v)}`).join(" ");
+        chartHtml += `
+          <polyline fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" points="${ariPoints}" class="chart-line-anim" />
+        `;
+        ariVals.forEach((v, i) => {
+          chartHtml += `<circle cx="${xPos(i)}" cy="${yPos(v)}" r="4.5" fill="#10b981" stroke="#ffffff" stroke-width="1.5" />`;
+        });
+
+        // Geometric polyline & dots
+        const geoPoints = geoVals.map((v, i) => `${xPos(i)},${yPos(v)}`).join(" ");
+        chartHtml += `
+          <polyline fill="none" stroke="#7c3aed" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" points="${geoPoints}" class="chart-line-anim" />
+        `;
+        geoVals.forEach((v, i) => {
+          chartHtml += `<circle cx="${xPos(i)}" cy="${yPos(v)}" r="5" fill="#7c3aed" stroke="#ffffff" stroke-width="1.5" />`;
+        });
+
+        svg.innerHTML = chartHtml;
+      }
+
+      ["t2-param-a", "t2-param-r", "t2-param-b"].forEach((id) => {
+        document.getElementById(id).addEventListener("input", () => {
+          renderGrowthRace();
+          raceTouchCount += 1;
+          if (raceTouchCount >= 1) {
+            completeStage("doneT2");
+          }
+        });
+      });
+
+      /* --------------------------------------------------------------------
+         4. TAHAP 3: MINI SIMULATOR RUMUS Un = a * r^(n-1)
+         -------------------------------------------------------------------- */
+      function computeGeometricTerm(a, r, n) {
+        const exp = n - 1;
+        const rPow = Math.pow(r, exp);
+        const result = a * rPow;
+        return { exp, rPow, result };
+      }
+
+      function renderMiniSimulator(fromGuessCheck) {
+        const aVal = Number(document.getElementById("sim-a").value) || 1;
+        const rSelect = document.getElementById("sim-r");
+        const rVal = Number(rSelect.value);
+        const rLabel = rSelect.options[rSelect.selectedIndex].textContent.split(" ")[0];
+        const nVal = Math.max(1, Math.min(12, Number(document.getElementById("sim-n").value) || 1));
+        document.getElementById("sim-n").value = nVal;
+
+        const testFirst = document.getElementById("sim-test-first").checked;
+        const predRow = document.getElementById("sim-prediction-row");
+        const outEl = document.getElementById("sim-steps-output");
+
+        if (testFirst) {
+          predRow.classList.remove("hidden");
+        } else {
+          predRow.classList.add("hidden");
+        }
+
+        if (testFirst && !fromGuessCheck) {
+          outEl.innerHTML = `<div class="text-amber-800 font-sans text-xs font-bold">⏳ Mode "Uji Tebakan Saya Dulu" aktif. Masukkan tebakanmu lalu klik "Cek &amp; Tampilkan Langkah".</div>`;
+          return;
+        }
+
+        const { exp, rPow, result } = computeGeometricTerm(aVal, rVal, nVal);
+
+        outEl.innerHTML = `
+          <div class="text-xs font-sans font-extrabold uppercase tracking-wider text-indigo-700 mb-1">
+            Langkah Penyelesaian U<sub>${nVal}</sub>
+          </div>
+          <div><span class="text-slate-500">1. Rumus:</span> U<sub>n</sub> = a · r<sup>n−1</sup></div>
+          <div><span class="text-slate-500">2. Substitusi:</span> U<sub>${nVal}</sub> = ${formatNum(aVal)} × (${rLabel})<sup>${nVal}−1</sup> = ${formatNum(aVal)} × (${rLabel})<sup>${exp}</sup></div>
+          <div><span class="text-slate-500">3. Hitung Pangkat Dulu:</span> (${rLabel})<sup>${exp}</sup> = <strong>${formatNum(rPow)}</strong></div>
+          <div><span class="text-slate-500">4. Kalikan dengan a:</span> ${formatNum(aVal)} × ${formatNum(rPow)} = <strong class="text-emerald-700 text-base">${formatNum(result)}</strong></div>
+        `;
+
+        completeStage("doneT3");
+      }
+
+      document.getElementById("sim-test-first").addEventListener("change", () => {
+        document.getElementById("sim-guess-fb").textContent = "";
+        document.getElementById("sim-user-guess").value = "";
+        renderMiniSimulator(false);
+      });
+
+      document.getElementById("sim-calc-btn").addEventListener("click", () => {
+        renderMiniSimulator(true);
+      });
+
+      document.getElementById("sim-check-guess-btn").addEventListener("click", () => {
+        const aVal = Number(document.getElementById("sim-a").value) || 1;
+        const rVal = Number(document.getElementById("sim-r").value);
+        const nVal = Math.max(1, Math.min(12, Number(document.getElementById("sim-n").value) || 1));
+        const { result } = computeGeometricTerm(aVal, rVal, nVal);
+
+        const rawGuess = document.getElementById("sim-user-guess").value.trim().replace(",", ".");
+        const parsedGuess = Number(rawGuess);
+        const fb = document.getElementById("sim-guess-fb");
+
+        if (rawGuess !== "" && !Number.isNaN(parsedGuess) && Math.abs(parsedGuess - result) < 1e-4) {
+          fb.className = "text-xs font-bold text-emerald-700";
+          fb.textContent = `🎉 Hebat! Tebakanmu tepat (${formatNum(result)}).`;
+        } else {
+          fb.className = "text-xs font-bold text-rose-600";
+          fb.textContent = `💡 Hasil sebenarnya ${formatNum(result)}. Perhatikan langkah di bawah.`;
+        }
+
+        renderMiniSimulator(true);
+      });
+
+      /* --------------------------------------------------------------------
+         5. TAHAP 4: LATIHAN MANDIRI ADAPTIF (4 SOAL + RANDOMIZER)
+         -------------------------------------------------------------------- */
+      let solvedQuizIndices = new Set();
+
+      function pickRandom(arr) {
+        return arr[Math.floor(Math.random() * arr.length)];
+      }
+
+      function generateQuiz() {
+        solvedQuizIndices = new Set();
+        const container = document.getElementById("t4-quiz-list");
+
+        // Item 1: Identify ratio r (including fractional/decreasing pattern)
+        const decSet = pickRandom([
+          { seq: [64, 32, 16, 8], ansText: "1/2", numVal: 0.5, exp: "Setiap suku dibagi 2 (dikali 1/2), maka rasio r = 1/2." },
+          { seq: [81, 27, 9, 3], ansText: "1/3", numVal: 1 / 3, exp: "Setiap suku dibagi 3 (dikali 1/3), maka rasio r = 1/3." },
+          { seq: [128, 32, 8, 2], ansText: "1/4", numVal: 0.25, exp: "Setiap suku dibagi 4 (dikali 1/4), maka rasio r = 1/4." }
+        ]);
+
+        // Item 2: Find U_n via exponent
+        const a2 = pickRandom([2, 3, 5]);
+        const r2 = pickRandom([2, 3]);
+        const n2 = pickRandom([4, 5, 6]);
+        const ans2 = a2 * Math.pow(r2, n2 - 1);
+
+        // Item 3: Cell division / growth word problem
+        const a3 = pickRandom([1, 2, 4]);
+        const r3 = 2;
+        const n3 = pickRandom([5, 6]);
+        const ans3 = a3 * Math.pow(r3, n3 - 1);
+
+        // Item 4: Spot order-of-operations mistake in a * r^(n-1)
+        const a4 = 2;
+        const r4 = 3;
+        const n4 = 3;
+        const trueAns4 = a4 * Math.pow(r4, n4 - 1); // 2 * 9 = 18
+        const wrongAns4 = Math.pow(a4 * r4, n4 - 1); // 6^2 = 36
+
+        const items = [
+          {
+            id: 0,
+            tag: "Soal 1 • Menentukan Rasio (r)",
+            tagClass: "bg-violet-100 text-violet-800",
+            prompt: `Perhatikan barisan geometri <strong class="font-mono">${decSet.seq.join(", ")}, ...</strong>. Tentukan rasio (<strong>r</strong>) barisan tersebut! (Tulis pecahan seperti <span class="font-mono">1/2</span> atau desimal <span class="font-mono">0.5</span>)`,
+            checkFn: (raw) => {
+              const cleaned = raw.trim().replace(",", ".");
+              if (cleaned === decSet.ansText) return true;
+              if (cleaned.includes("/")) {
+                const parts = cleaned.split("/");
+                if (parts.length === 2) {
+                  const num = Number(parts[0]);
+                  const den = Number(parts[1]);
+                  if (den !== 0 && !Number.isNaN(num) && !Number.isNaN(den)) {
+                    return Math.abs(num / den - decSet.numVal) < 1e-4;
+                  }
+                }
+              }
+              const asNum = Number(cleaned);
+              return cleaned !== "" && !Number.isNaN(asNum) && Math.abs(asNum - decSet.numVal) < 1e-4;
+            },
+            solution: `${decSet.exp} Jawaban yang diharapkan: <strong>${decSet.ansText}</strong>.`
+          },
+          {
+            id: 1,
+            tag: "Soal 2 • Menghitung Suku ke-n",
+            tagClass: "bg-indigo-100 text-indigo-800",
+            prompt: `Diketahui barisan geometri dengan suku pertama <strong class="font-mono">a = ${a2}</strong> dan rasio <strong class="font-mono">r = ${r2}</strong>. Berapakah nilai suku ke-${n2} (<strong>U<sub>${n2}</sub></strong>)?`,
+            checkFn: (raw) => Number(raw.trim()) === ans2 && raw.trim() !== "",
+            solution: `U<sub>${n2}</sub> = ${a2} × ${r2}<sup>${n2}−1</sup> = ${a2} × ${r2}<sup>${n2 - 1}</sup> = ${a2} × ${Math.pow(r2, n2 - 1)} = <strong>${ans2}</strong>.`
+          },
+          {
+            id: 2,
+            tag: "Soal 3 • Konteks Pembelahan Sel",
+            tagClass: "bg-emerald-100 text-emerald-800",
+            prompt: `Sebuah pengamatan dimulai dengan <strong class="font-mono">${a3}</strong> sel. Setiap periode pembelahan, setiap sel membelah menjadi <strong class="font-mono">${r3}</strong> bagian sama besar. Berapa jumlah sel pada tahap ke-<strong>${n3}</strong> (<strong>U<sub>${n3}</sub></strong>)?`,
+            checkFn: (raw) => Number(raw.trim()) === ans3 && raw.trim() !== "",
+            solution: `a = ${a3}, r = ${r3}. U<sub>${n3}</sub> = ${a3} × ${r3}<sup>${n3 - 1}</sup> = ${a3} × ${Math.pow(r3, n3 - 1)} = <strong>${ans3}</strong> sel.`
+          },
+          {
+            id: 3,
+            tag: "Soal 4 • Deteksi Kesalahan Pangkat",
+            tagClass: "bg-amber-100 text-amber-900",
+            prompt: `Diberikan barisan <strong class="font-mono">a = ${a4}, r = ${r4}</strong>. Siswa A keliru menghitungnya sebagai <span class="font-mono">(${a4} × ${r4})<sup>${n4 - 1}</sup> = ${wrongAns4}</span>. Berapakah nilai <strong>U<sub>${n4}</sub></strong> yang <strong>benar</strong> menurut urutan operasi?`,
+            checkFn: (raw) => Number(raw.trim()) === trueAns4 && raw.trim() !== "",
+            solution: `Pangkat hanya berlaku pada r: U<sub>${n4}</sub> = ${a4} × (${r4}<sup>${n4 - 1}</sup>) = ${a4} × ${Math.pow(r4, n4 - 1)} = <strong>${trueAns4}</strong> (bukan ${wrongAns4}).`
+          }
+        ];
+
+        container.innerHTML = "";
+        items.forEach((it) => {
+          const card = document.createElement("div");
+          card.className = "bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 flex flex-col justify-between space-y-3";
+          card.innerHTML = `
+            <div class="space-y-2">
+              <span class="inline-block text-[11px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full ${it.tagClass}">
+                ${it.tag}
+              </span>
+              <p class="text-xs sm:text-sm text-slate-800 leading-relaxed">${it.prompt}</p>
+            </div>
+            <div class="space-y-2 pt-1">
+              <div class="flex items-center gap-2">
+                <input type="text" id="t4-ans-${it.id}" placeholder="Jawaban..." class="w-36 px-3 py-1.5 rounded-xl border-2 border-slate-300 bg-white font-mono text-sm font-extrabold focus:outline-none focus:border-indigo-600" />
+                <button type="button" data-qid="${it.id}" class="t4-btn px-4 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition">
+                  Periksa
+                </button>
+              </div>
+              <p id="t4-fb-${it.id}" class="text-xs font-bold min-h-[16px]"></p>
+              <div id="t4-sol-${it.id}" class="hidden text-xs text-slate-700 bg-white border border-slate-200 rounded-xl p-3 leading-relaxed">
+                <strong>Pembahasan:</strong> ${it.solution}
+              </div>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+
+        document.querySelectorAll(".t4-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const qid = Number(btn.dataset.qid);
+            const item = items[qid];
+            const inp = document.getElementById(`t4-ans-${qid}`);
+            const fb = document.getElementById(`t4-fb-${qid}`);
+            const sol = document.getElementById(`t4-sol-${qid}`);
+
+            sol.classList.remove("hidden");
+
+            if (item.checkFn(inp.value)) {
+              inp.classList.remove("border-slate-300", "border-rose-500");
+              inp.classList.add("border-emerald-500", "bg-emerald-50");
+              fb.className = "text-xs font-bold text-emerald-700";
+              fb.textContent = "✅ Benar! Langkahmu tepat.";
+              solvedQuizIndices.add(qid);
+              if (solvedQuizIndices.size >= 3) {
+                completeStage("doneT4");
+              }
+            } else {
+              inp.classList.remove("border-slate-300", "border-emerald-500");
+              inp.classList.add("border-rose-500", "bg-rose-50");
+              fb.className = "text-xs font-bold text-rose-600";
+              fb.textContent = "❌ Kurang tepat. Cek pembahasan di bawah.";
+            }
+          });
+        });
+      }
+
+      document.getElementById("btn-regen-t4").addEventListener("click", generateQuiz);
+
+      /* --------------------------------------------------------------------
+         6. INITIALIZATION
+         -------------------------------------------------------------------- */
+      refreshProgress();
+      updateRatioBadge();
+      renderCellLab();
+      renderGrowthRace();
+      renderMiniSimulator(true);
+      generateQuiz();
+    })();
+  </script>
+</body>
+</html>

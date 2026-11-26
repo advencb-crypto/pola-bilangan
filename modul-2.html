@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NŪMA (Number Numen) — Algebra | Modul 2: Barisan Aritmetika (Pola Selisih Tetap)</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+      overflow-x: hidden;
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    @keyframes revealPop {
+      0% {
+        opacity: 0;
+        transform: translateY(10px) scale(0.97);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .reveal-pop {
+      animation: revealPop 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    @keyframes dashArc {
+      from {
+        stroke-dashoffset: 180;
+      }
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    .arc-animate {
+      stroke-dasharray: 180;
+      animation: dashArc 0.55s ease-out forwards;
+    }
+  </style>
+</head>
+<body class="pb-16 antialiased selection:bg-indigo-100 selection:text-indigo-900">
+
+  <!-- ======================================================================
+       1. STICKY HEADER & AUTOMATIC PROGRESS TRACKER (0% - 100%)
+       ====================================================================== -->
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      <!-- Brand Identity -->
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-indigo-950 via-indigo-600 to-emerald-500 text-white flex items-center justify-center font-extrabold text-lg tracking-tight shadow-md shadow-indigo-600/20 shrink-0">
+          NŪ
+        </div>
+        <div>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-[11px] font-extrabold uppercase tracking-wider bg-indigo-100 text-indigo-800 px-2.5 py-0.5 rounded-full">
+              NŪMA (NUMBER NUMEN) — ALGEBRA • MODUL 2 DARI 5
+            </span>
+          </div>
+          <h1 class="text-base sm:text-lg font-extrabold text-indigo-950 leading-tight mt-0.5">
+            Barisan Aritmetika (Pola Selisih Tetap)
+          </h1>
+        </div>
+      </div>
+
+      <!-- Progress Bar & Reset -->
+      <div class="flex items-center gap-2.5 flex-wrap">
+        <div class="flex items-center gap-2.5 bg-slate-100 border border-slate-200 px-3.5 py-1.5 rounded-full" title="Progres penyelesaian 4 tahap utama modul ini">
+          <span class="text-xs font-bold text-slate-700">Progres</span>
+          <div class="w-24 h-2 bg-slate-200 rounded-full overflow-hidden">
+            <div id="progress-bar" class="h-full w-0 bg-gradient-to-r from-indigo-600 via-emerald-500 to-amber-500 rounded-full transition-all duration-500"></div>
+          </div>
+          <span id="progress-text" class="text-xs font-extrabold font-mono text-emerald-600 min-w-[34px] text-right">0%</span>
+        </div>
+
+        <button type="button" id="btn-reset-progress" class="text-xs font-bold text-slate-600 hover:text-rose-600 bg-slate-100 hover:bg-rose-50 border border-slate-200 px-3 py-1.5 rounded-full transition" title="Reset progres belajar modul 2">
+          Reset
+        </button>
+      </div>
+    </div>
+
+    <!-- Quick Navigation Across 4 Stages -->
+    <nav class="bg-slate-50 border-t border-slate-200 overflow-x-auto no-scrollbar" aria-label="Navigasi Tahap Modul 2">
+      <div class="max-w-6xl mx-auto px-4 py-2 flex items-center gap-2">
+        <a href="#tahap-1" id="nav-t1" class="text-xs font-semibold text-slate-600 hover:bg-indigo-100 hover:text-indigo-900 px-3 py-1.5 rounded-full whitespace-nowrap transition flex items-center gap-1.5">
+          <span class="check-badge hidden text-emerald-600 font-extrabold">✓</span>
+          <span>1. Garis Bilangan &amp; Panah (+b/−b)</span>
+        </a>
+        <a href="#tahap-2" id="nav-t2" class="text-xs font-semibold text-slate-600 hover:bg-indigo-100 hover:text-indigo-900 px-3 py-1.5 rounded-full whitespace-nowrap transition flex items-center gap-1.5">
+          <span class="check-badge hidden text-emerald-600 font-extrabold">✓</span>
+          <span>2. Penemuan Rumus U<sub>n</sub></span>
+        </a>
+        <a href="#tahap-3" id="nav-t3" class="text-xs font-semibold text-slate-600 hover:bg-indigo-100 hover:text-indigo-900 px-3 py-1.5 rounded-full whitespace-nowrap transition flex items-center gap-1.5">
+          <span class="check-badge hidden text-emerald-600 font-extrabold">✓</span>
+          <span>3. Simulator Suku ke-n &amp; U<sub>100</sub></span>
+        </a>
+        <a href="#tahap-4" id="nav-t4" class="text-xs font-semibold text-slate-600 hover:bg-indigo-100 hover:text-indigo-900 px-3 py-1.5 rounded-full whitespace-nowrap transition flex items-center gap-1.5">
+          <span class="check-badge hidden text-emerald-600 font-extrabold">✓</span>
+          <span>4. Latihan Mandiri Adaptif</span>
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 pt-6 space-y-8">
+
+    <!-- ====================================================================
+         HERO BANNER: ORIENTATION & AUTHOR CREDIT
+         ==================================================================== -->
+    <section class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-950 via-indigo-800 to-indigo-700 text-white p-6 sm:p-8 shadow-xl shadow-indigo-950/15">
+      <div class="absolute -right-12 -bottom-12 w-72 h-72 rounded-full bg-emerald-400/15 blur-2xl pointer-events-none"></div>
+      <div class="relative z-10">
+        <div class="max-w-3xl">
+          <span class="inline-flex items-center gap-1.5 bg-white/15 border border-white/20 text-amber-300 text-xs font-bold px-3.5 py-1 rounded-full mb-3">
+            🧭 Eksplorasi Mandiri Pra-Pembelajaran • Matematika SMP Kelas 8
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold leading-snug mb-3">
+            Pahami Lompatan Konstan (+b atau −b), Temukan Rumusnya Tanpa Hafalan Buta!
+          </h2>
+          <p class="text-sm sm:text-base text-indigo-100 leading-relaxed mb-5">
+            Dalam <strong>Barisan Aritmetika</strong>, setiap langkah ke suku berikutnya selalu bertambah atau berkurang dengan angka tetap yang disebut <strong>beda (b)</strong>. Melalui 4 tahap interaktif di bawah ini, kamu akan melihat panah lompatannya secara visual dan menemukan sendiri mengapa rumusnya dikali <strong>(n − 1)</strong>.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
+          <a href="#tahap-1" class="bg-white/10 hover:bg-white/15 border border-white/15 rounded-2xl p-3.5 transition block">
+            <div class="text-[11px] font-extrabold uppercase tracking-wider text-emerald-300">Tahap 1</div>
+            <div class="text-sm font-bold text-white">Garis Bilangan Panah</div>
+            <p class="text-xs text-indigo-200 mt-0.5">Amati selisih tetap +b (hijau) &amp; −b (merah).</p>
+          </a>
+          <a href="#tahap-2" class="bg-white/10 hover:bg-white/15 border border-white/15 rounded-2xl p-3.5 transition block">
+            <div class="text-[11px] font-extrabold uppercase tracking-wider text-amber-300">Tahap 2</div>
+            <div class="text-sm font-bold text-white">Bangun Rumus U<sub>n</sub></div>
+            <p class="text-xs text-indigo-200 mt-0.5">Hitung banyak panah loncatan dari U<sub>1</sub>.</p>
+          </a>
+          <a href="#tahap-3" class="bg-white/10 hover:bg-white/15 border border-white/15 rounded-2xl p-3.5 transition block">
+            <div class="text-[11px] font-extrabold uppercase tracking-wider text-sky-300">Tahap 3</div>
+            <div class="text-sm font-bold text-white">Simulator Suku ke-100</div>
+            <p class="text-xs text-indigo-200 mt-0.5">Kunci a &amp; b, lalu hitung U<sub>n</sub> instan.</p>
+          </a>
+          <a href="#tahap-4" class="bg-white/10 hover:bg-white/15 border border-white/15 rounded-2xl p-3.5 transition block">
+            <div class="text-[11px] font-extrabold uppercase tracking-wider text-rose-300">Tahap 4</div>
+            <div class="text-sm font-bold text-white">Latihan Adaptif</div>
+            <p class="text-xs text-indigo-200 mt-0.5">4 tipe soal dengan generator acak.</p>
+          </a>
+        </div>
+
+        <div class="pt-3.5 border-t border-white/15 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-indigo-200">
+          <span>👩‍🏫 Disusun oleh: <strong class="text-white">Lusia Adven Ningrum • Guru Matematika SMP Kelas 8</strong></span>
+          <span class="hidden sm:inline">•</span>
+          <span>🎨 Kode Warna: <strong class="text-emerald-300">+b Naik (Emerald)</strong> &amp; <strong class="text-rose-300">−b Turun (Rose)</strong></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         2. TAHAP 1: EKSPLORASI GARIS BILANGAN & PANAH LONCATAN (+b / -b)
+         ==================================================================== -->
+    <section id="tahap-1" class="scroll-mt-28 bg-white rounded-2xl border border-slate-200 p-5 sm:p-8 shadow-sm">
+      <div class="flex flex-wrap items-start justify-between gap-3 pb-4 mb-6 border-b border-slate-100">
+        <div>
+          <span class="inline-block bg-indigo-100 text-indigo-900 text-xs font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-md mb-1.5">
+            Tahap 1 • Visualisasi Beda Konstan (b)
+          </span>
+          <h3 class="text-xl sm:text-2xl font-extrabold text-indigo-950">
+            Eksplorasi Garis Bilangan &amp; Panah Loncatan (+b / −b)
+          </h3>
+        </div>
+        <span id="status-t1" class="text-xs font-bold px-3.5 py-1.5 rounded-full bg-slate-100 text-slate-600">
+          🎯 Misi: Coba minimal 2 preset / mode kustom
+        </span>
+      </div>
+
+      <!-- Preset Buttons & Custom Toggle -->
+      <div class="flex flex-wrap items-center gap-2 mb-5">
+        <button type="button" data-preset="naik" class="t1-preset-btn active px-3.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold bg-indigo-600 text-white shadow-sm transition">
+          📈 Preset 1: Aritmetika Naik (a = 3, b = +4)
+        </button>
+        <button type="button" data-preset="turun" class="t1-preset-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 transition">
+          📉 Preset 2: Aritmetika Turun (a = 20, b = −3)
+        </button>
+        <button type="button" data-preset="negatif" class="t1-preset-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 transition">
+          ❄️ Preset 3: Bilangan Negatif (a = −12, b = +5)
+        </button>
+        <button type="button" data-preset="kustom" class="t1-preset-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-amber-50 text-amber-900 hover:bg-amber-100 border border-amber-300 transition">
+          🎛️ Mode Kustom (Atur a &amp; b Sendiri)
+        </button>
+      </div>
+
+      <!-- Custom Controls Drawer (Visible in Mode Kustom) -->
+      <div id="custom-controls-panel" class="hidden bg-amber-50/80 border border-amber-300 rounded-2xl p-4 sm:p-5 mb-5">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div>
+            <div class="flex items-center justify-between text-xs font-bold text-slate-700 mb-1.5">
+              <label for="slider-a">Suku Pertama (<span class="font-mono text-indigo-700">a</span> atau <span class="font-mono">U₁</span>):</label>
+              <input type="number" id="input-num-a" min="-50" max="50" value="3" class="w-20 px-2 py-1 rounded-lg border border-slate-300 bg-white font-mono text-xs font-extrabold text-center" />
+            </div>
+            <input type="range" id="slider-a" min="-30" max="40" value="3" class="w-full accent-indigo-600 cursor-pointer" />
+            <div class="flex justify-between text-[10px] font-mono text-slate-500 mt-1">
+              <span>−30</span><span>0</span><span>+40</span>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between text-xs font-bold text-slate-700 mb-1.5">
+              <label for="slider-b">Beda / Selisih (<span class="font-mono text-emerald-700">b</span>):</label>
+              <input type="number" id="input-num-b" min="-20" max="20" value="4" class="w-20 px-2 py-1 rounded-lg border border-slate-300 bg-white font-mono text-xs font-extrabold text-center" />
+            </div>
+            <input type="range" id="slider-b" min="-15" max="15" value="4" class="w-full accent-emerald-600 cursor-pointer" />
+            <div class="flex justify-between text-[10px] font-mono text-slate-500 mt-1">
+              <span>−15 (Turun)</span><span>0</span><span>+15 (Naik)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive SVG Number Line with Curved Difference Arcs -->
+      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 mb-5">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <div class="flex items-center gap-2">
+            <span class="font-mono text-xs font-extrabold bg-indigo-950 text-white px-3 py-1 rounded-full">
+              U₁ sampai U₆
+            </span>
+            <span id="t1-direction-pill" class="text-xs font-extrabold px-3 py-1 rounded-full bg-emerald-100 text-emerald-800">
+              Beda Positif (+4) • Barisan Naik
+            </span>
+          </div>
+          <div class="text-xs font-mono font-bold text-slate-600">
+            a = <span id="display-a-val" class="text-indigo-700 font-extrabold">3</span> &nbsp;|&nbsp;
+            b = <span id="display-b-val" class="text-emerald-600 font-extrabold">+4</span>
+          </div>
+        </div>
+
+        <div class="w-full overflow-x-auto bg-white border border-slate-200 rounded-2xl p-2 sm:p-4">
+          <svg id="svg-number-line" viewBox="0 0 820 225" class="w-full min-w-[640px] h-auto select-none" role="img" aria-label="Garis bilangan barisan aritmetika dengan panah lengkung selisih antar suku"></svg>
+        </div>
+      </div>
+
+      <!-- Automatic Conceptual Explanation Box -->
+      <div id="t1-concept-box" class="bg-indigo-50/80 border-l-4 border-indigo-600 rounded-2xl p-4 sm:p-5 text-xs sm:text-sm text-slate-800 leading-relaxed"></div>
+    </section>
+
+    <!-- ====================================================================
+         3. TAHAP 2: PENEMUAN TERBIMBING RUMUS Un = a + (n - 1)b
+         ==================================================================== -->
+    <section id="tahap-2" class="scroll-mt-28 bg-white rounded-2xl border border-slate-200 p-5 sm:p-8 shadow-sm">
+      <div class="flex flex-wrap items-start justify-between gap-3 pb-4 mb-6 border-b border-slate-100">
+        <div>
+          <span class="inline-block bg-amber-100 text-amber-900 text-xs font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-md mb-1.5">
+            Tahap 2 • Anti-Hafalan Buta (Discovery Learning)
+          </span>
+          <h3 class="text-xl sm:text-2xl font-extrabold text-indigo-950">
+            Menemukan Sendiri Rumus Suku ke-n: U<sub>n</sub> = a + (n − 1)b
+          </h3>
+        </div>
+        <span id="status-t2" class="text-xs font-bold px-3.5 py-1.5 rounded-full bg-slate-100 text-slate-600">
+          🎯 Misi: Tebak jumlah panah ke U₁₀ &amp; U₁₀₀ untuk membuka rumus
+        </span>
+      </div>
+
+      <p class="text-xs sm:text-sm text-slate-700 leading-relaxed mb-5">
+        Perhatikan panah lengkung pada garis bilangan di atas! Untuk melangkah dari suku pertama (<strong>U<sub>1</sub> = a</strong>) menuju suku tertentu, kita tidak perlu menghafal rumus terlebih dahulu—cukup hitung <strong>ada berapa banyak panah loncatan (b)</strong> yang dilewati.
+      </p>
+
+      <!-- Interactive Mapping Table U_1 to U_5 -->
+      <div class="overflow-x-auto rounded-2xl border border-slate-200 mb-6">
+        <table class="w-full text-left border-collapse text-xs sm:text-sm">
+          <thead>
+            <tr class="bg-indigo-950 text-white">
+              <th class="py-3 px-3.5">Suku ke-n</th>
+              <th class="py-3 px-3.5 text-center">Banyak Panah Loncatan dari U<sub>1</sub></th>
+              <th class="py-3 px-3.5">Pola Penjumlahan Beda</th>
+              <th class="py-3 px-3.5">Bentuk Aljabar</th>
+            </tr>
+          </thead>
+          <tbody id="t2-discovery-tbody" class="divide-y divide-slate-200 font-mono">
+            <tr class="hover:bg-indigo-50/50 transition cursor-pointer" data-jump-row="1">
+              <td class="py-3 px-3.5 font-extrabold text-indigo-950">U<sub>1</sub> (n = 1)</td>
+              <td class="py-3 px-3.5 text-center"><span class="px-2.5 py-0.5 rounded-full bg-slate-100 font-bold">0 loncatan</span></td>
+              <td class="py-3 px-3.5 text-slate-700">a (belum melompat)</td>
+              <td class="py-3 px-3.5 font-bold text-indigo-700">a + (<span class="text-amber-600">1 − 1</span>)b = a + 0b</td>
+            </tr>
+            <tr class="hover:bg-indigo-50/50 transition cursor-pointer" data-jump-row="2">
+              <td class="py-3 px-3.5 font-extrabold text-indigo-950">U<sub>2</sub> (n = 2)</td>
+              <td class="py-3 px-3.5 text-center"><span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">1 loncatan</span></td>
+              <td class="py-3 px-3.5 text-slate-700">a + b</td>
+              <td class="py-3 px-3.5 font-bold text-indigo-700">a + (<span class="text-amber-600">2 − 1</span>)b = a + 1b</td>
+            </tr>
+            <tr class="hover:bg-indigo-50/50 transition cursor-pointer" data-jump-row="3">
+              <td class="py-3 px-3.5 font-extrabold text-indigo-950">U<sub>3</sub> (n = 3)</td>
+              <td class="py-3 px-3.5 text-center"><span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">2 loncatan</span></td>
+              <td class="py-3 px-3.5 text-slate-700">a + b + b</td>
+              <td class="py-3 px-3.5 font-bold text-indigo-700">a + (<span class="text-amber-600">3 − 1</span>)b = a + 2b</td>
+            </tr>
+            <tr class="hover:bg-indigo-50/50 transition cursor-pointer" data-jump-row="4">
+              <td class="py-3 px-3.5 font-extrabold text-indigo-950">U<sub>4</sub> (n = 4)</td>
+              <td class="py-3 px-3.5 text-center"><span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">3 loncatan</span></td>
+              <td class="py-3 px-3.5 text-slate-700">a + b + b + b</td>
+              <td class="py-3 px-3.5 font-bold text-indigo-700">a + (<span class="text-amber-600">4 − 1</span>)b = a + 3b</td>
+            </tr>
+            <tr class="hover:bg-indigo-50/50 transition cursor-pointer" data-jump-row="5">
+              <td class="py-3 px-3.5 font-extrabold text-indigo-950">U<sub>5</sub> (n = 5)</td>
+              <td class="py-3 px-3.5 text-center"><span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">4 loncatan</span></td>
+              <td class="py-3 px-3.5 text-slate-700">a + b + b + b + b</td>
+              <td class="py-3 px-3.5 font-bold text-indigo-700">a + (<span class="text-amber-600">5 − 1</span>)b = a + 4b</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Interactive Gatekeeper Check: U_10 and U_100 Jumps -->
+      <div class="bg-amber-50 border-2 border-amber-300 rounded-2xl p-5 mb-6">
+        <span class="inline-block text-[11px] font-extrabold uppercase tracking-wider bg-amber-500 text-white px-2.5 py-0.5 rounded-full mb-2">
+          🔑 Kunci Pembuka Rumus Utama
+        </span>
+        <p class="text-xs sm:text-sm font-bold text-slate-800 mb-4">
+          Lihat polanya: untuk ke U<sub>2</sub> butuh 1 loncatan, ke U<sub>3</sub> butuh 2 loncatan, ke U<sub>5</sub> butuh 4 loncatan. Sekarang tebak dua pertanyaan ini untuk membuka kartu rumus!
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-white rounded-xl p-4 border border-amber-200 space-y-2">
+            <label for="input-jump-10" class="block text-xs font-bold text-slate-700">
+              1. Dari U<sub>1</sub> menuju <span class="font-mono text-indigo-700 font-extrabold">U<sub>10</sub></span>, ada berapa panah loncatan?
+            </label>
+            <div class="flex items-center gap-2">
+              <input type="number" id="input-jump-10" placeholder="?" class="w-24 px-3 py-1.5 rounded-xl border border-slate-300 font-mono text-sm font-extrabold text-center focus:outline-none focus:border-indigo-600" />
+              <span class="text-xs font-bold text-slate-500">loncatan</span>
+              <button type="button" id="btn-check-jump-10" class="px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition">
+                Cek
+              </button>
+            </div>
+            <p id="fb-jump-10" class="text-xs font-bold min-h-[18px]"></p>
+          </div>
+
+          <div class="bg-white rounded-xl p-4 border border-amber-200 space-y-2">
+            <label for="input-jump-100" class="block text-xs font-bold text-slate-700">
+              2. Dari U<sub>1</sub> menuju <span class="font-mono text-emerald-700 font-extrabold">U<sub>100</sub></span>, ada berapa panah loncatan?
+            </label>
+            <div class="flex items-center gap-2">
+              <input type="number" id="input-jump-100" placeholder="?" class="w-24 px-3 py-1.5 rounded-xl border border-slate-300 font-mono text-sm font-extrabold text-center focus:outline-none focus:border-indigo-600" />
+              <span class="text-xs font-bold text-slate-500">loncatan</span>
+              <button type="button" id="btn-check-jump-100" class="px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition">
+                Cek
+              </button>
+            </div>
+            <p id="fb-jump-100" class="text-xs font-bold min-h-[18px]"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Unlocked Formula Card (Hidden until both jumps are answered correctly) -->
+      <div id="unlocked-formula-card" class="hidden reveal-pop rounded-2xl bg-gradient-to-br from-indigo-950 via-indigo-900 to-indigo-800 text-white p-6 shadow-lg">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <span class="text-[11px] font-extrabold uppercase tracking-wider bg-emerald-500 text-white px-3 py-1 rounded-full">
+            🎉 Rumus Barisan Aritmetika Berhasil Ditemukan!
+          </span>
+          <span class="text-xs font-mono text-amber-300 font-bold">Konsep: Loncatan = (n − 1)</span>
+        </div>
+
+        <div class="bg-white/10 border border-white/20 rounded-2xl p-4 text-center my-3">
+          <div class="font-mono text-2xl sm:text-3xl font-extrabold tracking-wide text-amber-300">
+            U<sub>n</sub> = a + (n − 1)b
+          </div>
+        </div>
+
+        <p class="text-xs sm:text-sm text-indigo-100 leading-relaxed">
+          <strong>Mengapa dikali (n − 1) dan bukan n?</strong> Karena kita sudah berdiri di suku pertama (<strong>a = U<sub>1</sub></strong>). Untuk mencapai urutan ke-<strong>n</strong>, kita hanya perlu melompat sebanyak <strong>(n − 1) kali</strong> sejauh <strong>b</strong>! Misalnya ke U<sub>100</sub>, cukup dari U<sub>1</sub> ditambah <strong>99 kali beda (99b)</strong>.
+        </p>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         4. TAHAP 3: SIMULATOR PENCARI SUKU KE-n & SUKU KE-100
+         ==================================================================== -->
+    <section id="tahap-3" class="scroll-mt-28 bg-white rounded-2xl border border-slate-200 p-5 sm:p-8 shadow-sm">
+      <div class="flex flex-wrap items-start justify-between gap-3 pb-4 mb-6 border-b border-slate-100">
+        <div>
+          <span class="inline-block bg-emerald-100 text-emerald-900 text-xs font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-md mb-1.5">
+            Tahap 3 • Laboratorium Komputasi Bertahap
+          </span>
+          <h3 class="text-xl sm:text-2xl font-extrabold text-indigo-950">
+            Simulator Pencari Suku ke-n &amp; Suku ke-100
+          </h3>
+        </div>
+        <span id="status-t3" class="text-xs font-bold px-3.5 py-1.5 rounded-full bg-slate-100 text-slate-600">
+          🎯 Misi: Kunci (a &amp; b) lalu hitung minimal 1 suku besar
+        </span>
+      </div>
+
+      <!-- STEP A: Identify & Lock a and b -->
+      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 mb-6">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <span class="text-xs font-extrabold uppercase tracking-wider text-indigo-700">
+            Langkah A • Identifikasi &amp; Kunci Nilai a dan b
+          </span>
+          <button type="button" id="btn-new-sim-seq" class="text-xs font-bold text-indigo-700 hover:bg-indigo-100 bg-white border border-indigo-200 px-3 py-1 rounded-xl transition">
+            🔄 Ganti Contoh Barisan
+          </button>
+        </div>
+
+        <div class="bg-white border border-slate-200 rounded-xl p-3.5 mb-4 flex flex-wrap items-center justify-between gap-2">
+          <span class="text-xs font-bold text-slate-600">Barisan yang Dianalisis:</span>
+          <span id="sim-sequence-display" class="font-mono text-base sm:text-lg font-extrabold text-indigo-950">
+            5, 9, 13, 17, 21, ...
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
+          <div>
+            <label for="sim-input-a" class="block text-xs font-bold text-slate-700 mb-1">
+              Suku Pertama (<span class="font-mono text-indigo-700">a</span>):
+            </label>
+            <input type="number" id="sim-input-a" placeholder="Masukkan a" class="w-full px-3.5 py-2 rounded-xl border-2 border-slate-300 bg-white font-mono text-sm font-extrabold focus:outline-none focus:border-indigo-600" />
+          </div>
+
+          <div>
+            <label for="sim-input-b" class="block text-xs font-bold text-slate-700 mb-1">
+              Beda (<span class="font-mono text-emerald-700">b = U₂ − U₁</span>):
+            </label>
+            <input type="number" id="sim-input-b" placeholder="Masukkan b" class="w-full px-3.5 py-2 rounded-xl border-2 border-slate-300 bg-white font-mono text-sm font-extrabold focus:outline-none focus:border-emerald-600" />
+          </div>
+
+          <div>
+            <button type="button" id="btn-lock-ab" class="w-full py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs sm:text-sm shadow-sm transition">
+              🔒 Kunci a &amp; b untuk Simulator
+            </button>
+          </div>
+        </div>
+
+        <p id="fb-lock-ab" class="text-xs font-bold mt-2.5 min-h-[18px]"></p>
+      </div>
+
+      <!-- STEP B: Simulator Panel (Locked until Step A succeeds) -->
+      <div id="sim-step-b-panel" class="relative rounded-2xl border-2 border-indigo-200 bg-indigo-50/40 p-5 transition">
+        <div id="sim-lock-overlay" class="bg-white/90 backdrop-blur-[2px] border border-slate-200 rounded-xl p-4 text-center mb-4">
+          <p class="text-xs sm:text-sm font-bold text-slate-700">
+            🔒 Selesaikan <strong>Langkah A</strong> di atas (temukan &amp; kunci nilai <strong>a</strong> dan <strong>b</strong>) untuk mengaktifkan simulator suku ke-n!
+          </p>
+        </div>
+
+        <div id="sim-active-content" class="opacity-50 pointer-events-none transition-opacity duration-300 space-y-5">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-700">
+              Langkah B • Eksplorasi Suku ke-n &amp; Suku ke-100
+            </span>
+
+            <!-- Prediction Challenge Mode Toggle -->
+            <label class="inline-flex items-center gap-2 bg-amber-100 border border-amber-300 px-3 py-1.5 rounded-full cursor-pointer select-none">
+              <input type="checkbox" id="toggle-prediction-mode" class="accent-amber-600 w-4 h-4 cursor-pointer" />
+              <span class="text-xs font-extrabold text-amber-950">🎯 Mode Tantangan Prediksi</span>
+            </label>
+          </div>
+
+          <!-- Quick Term Buttons + Custom n Input -->
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-xs font-bold text-slate-600 mr-1">Pilih Target Suku:</span>
+            <button type="button" data-target-n="10" class="sim-n-btn px-3.5 py-2 rounded-xl text-xs font-mono font-extrabold bg-white border border-slate-300 hover:border-indigo-500 text-indigo-950 transition">
+              U<sub>10</sub>
+            </button>
+            <button type="button" data-target-n="25" class="sim-n-btn px-3.5 py-2 rounded-xl text-xs font-mono font-extrabold bg-white border border-slate-300 hover:border-indigo-500 text-indigo-950 transition">
+              U<sub>25</sub>
+            </button>
+            <button type="button" data-target-n="50" class="sim-n-btn px-3.5 py-2 rounded-xl text-xs font-mono font-extrabold bg-white border border-slate-300 hover:border-indigo-500 text-indigo-950 transition">
+              U<sub>50</sub>
+            </button>
+            <button type="button" data-target-n="100" class="sim-n-btn px-3.5 py-2 rounded-xl text-xs font-mono font-extrabold bg-amber-500 text-white shadow-sm transition">
+              U<sub>100</sub>
+            </button>
+
+            <div class="flex items-center gap-1.5 ml-auto bg-white border border-slate-300 rounded-xl px-2.5 py-1">
+              <label for="sim-custom-n" class="text-xs font-mono font-bold text-slate-600">n =</label>
+              <input type="number" id="sim-custom-n" min="1" max="10000" value="100" class="w-20 font-mono text-xs font-extrabold text-center focus:outline-none" />
+              <button type="button" id="btn-sim-run-custom-n" class="px-2.5 py-1 rounded-lg bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-700 transition">
+                Hitung
+              </button>
+            </div>
+          </div>
+
+          <!-- Prediction Challenge Box (Shown when toggle is checked) -->
+          <div id="prediction-challenge-box" class="hidden bg-amber-50 border-2 border-amber-300 rounded-2xl p-4">
+            <p class="text-xs sm:text-sm font-bold text-amber-950 mb-2.5">
+              🧠 Tantangan Prediksi: Hitung dulu nilai <span id="pred-target-label" class="font-mono font-extrabold text-indigo-700">U₁₀₀</span> secara manual sebelum membuka rincian jawaban!
+            </p>
+            <div class="flex flex-wrap items-center gap-2.5">
+              <input type="number" id="input-pred-answer" placeholder="Ketik tebakanmu..." class="w-36 px-3 py-1.5 rounded-xl border border-amber-400 bg-white font-mono text-sm font-extrabold text-center focus:outline-none focus:border-indigo-600" />
+              <button type="button" id="btn-check-prediction" class="px-4 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-extrabold text-xs transition">
+                Cek &amp; Buka Langkah
+              </button>
+              <span id="fb-prediction" class="text-xs font-bold"></span>
+            </div>
+          </div>
+
+          <!-- Step-by-Step Substitution Breakdown -->
+          <div id="sim-breakdown-card" class="bg-white border border-slate-200 rounded-2xl p-5 font-mono text-xs sm:text-sm space-y-2.5 shadow-sm"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         5. TAHAP 4: LATIHAN MANDIRI ADAPTIF & NAVIGASI MODUL
+         ==================================================================== -->
+    <section id="tahap-4" class="scroll-mt-28 bg-white rounded-2xl border border-slate-200 p-5 sm:p-8 shadow-sm">
+      <div class="flex flex-wrap items-start justify-between gap-3 pb-4 mb-6 border-b border-slate-100">
+        <div>
+          <span class="inline-block bg-rose-100 text-rose-900 text-xs font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-md mb-1.5">
+            Tahap 4 • Uji Penguasaan Mandiri
+          </span>
+          <h3 class="text-xl sm:text-2xl font-extrabold text-indigo-950">
+            Latihan Mandiri Adaptif Barisan Aritmetika
+          </h3>
+        </div>
+        <span id="status-t4" class="text-xs font-bold px-3.5 py-1.5 rounded-full bg-slate-100 text-slate-600">
+          🎯 Misi: Selesaikan minimal 3 dari 4 soal dengan benar
+        </span>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-5">
+        <p class="text-xs sm:text-sm text-slate-700">
+          Kerjakan keempat soal berikut untuk memastikan kamu siap lanjut ke Modul 3. Gunakan tombol di kanan untuk mengacak angka baru kapan saja.
+        </p>
+        <button type="button" id="btn-regen-t4" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-extrabold text-xs sm:text-sm shadow-sm transition shrink-0">
+          🎲 Buat Variasi Soal Baru
+        </button>
+      </div>
+
+      <!-- 4 Adaptive Questions Container -->
+      <div id="t4-quiz-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6"></div>
+
+      <!-- Bottom Module Navigation Cards -->
+      <div class="pt-6 border-t border-slate-200">
+        <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-500 mb-3">
+          Navigasi Rangkaian Modul NŪMA — Algebra
+        </h4>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <a href="index.html" class="group p-4 rounded-2xl border border-slate-200 hover:border-indigo-500 bg-slate-50 hover:bg-indigo-50/70 transition flex items-center justify-between">
+            <div>
+              <div class="text-[11px] font-extrabold text-slate-500 uppercase">← Kembali ke Modul 1</div>
+              <div class="text-sm sm:text-base font-extrabold text-indigo-950 group-hover:text-indigo-700 mt-0.5">
+                Pengenalan Pola &amp; Konfigurasi Objek
+              </div>
+            </div>
+            <span class="text-lg font-extrabold text-indigo-600">←</span>
+          </a>
+
+          <a href="modul-3.html" class="group p-4 rounded-2xl border border-indigo-200 hover:border-emerald-500 bg-indigo-50/60 hover:bg-emerald-50/80 transition flex items-center justify-between">
+            <div>
+              <div class="text-[11px] font-extrabold text-emerald-700 uppercase">Lanjut ke Modul 3 →</div>
+              <div class="text-sm sm:text-base font-extrabold text-indigo-950 group-hover:text-emerald-800 mt-0.5">
+                Barisan Geometri (Pola Rasio Tetap)
+              </div>
+            </div>
+            <span class="text-lg font-extrabold text-emerald-600">→</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="max-w-6xl mx-auto px-4 pt-8 text-center text-xs text-slate-500">
+    <strong>NŪMA (Number Numen) — Algebra</strong> • Dikembangkan oleh <strong>Lusia Adven Ningrum</strong> • Media Pembelajaran Mandiri Matematika SMP Kelas 8.
+  </footer>
+
+  <!-- ======================================================================
+       INTERACTIVE JAVASCRIPT ENGINE
+       ====================================================================== -->
+  <script>
+    (function () {
+      "use strict";
+
+      const STORAGE_KEY = "numa_mod2_aritmetika_v1";
+
+      const defaultState = {
+        doneT1: false,
+        doneT2: false,
+        doneT3: false,
+        doneT4: false,
+        presetCount: 1,
+        jump10Done: false,
+        jump100Done: false
+      };
+
+      let appState = loadState();
+
+      function loadState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return { ...defaultState };
+          return { ...defaultState, ...JSON.parse(raw) };
+        } catch (e) {
+          return { ...defaultState };
+        }
+      }
+
+      function saveState() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+        } catch (e) {
+          // Ignore storage error in restricted mode
+        }
+      }
+
+      /* --------------------------------------------------------------------
+         1. PROGRESS TRACKER (0% -> 25% -> 50% -> 75% -> 100%)
+         -------------------------------------------------------------------- */
+      function updateProgressUI() {
+        const flags = [appState.doneT1, appState.doneT2, appState.doneT3, appState.doneT4];
+        const doneCount = flags.filter(Boolean).length;
+        const pct = Math.round((doneCount / 4) * 100);
+
+        document.getElementById("progress-bar").style.width = pct + "%";
+        document.getElementById("progress-text").textContent = pct + "%";
+
+        const items = [
+          { done: appState.doneT1, statusId: "status-t1", navId: "nav-t1" },
+          { done: appState.doneT2, statusId: "status-t2", navId: "nav-t2" },
+          { done: appState.doneT3, statusId: "status-t3", navId: "nav-t3" },
+          { done: appState.doneT4, statusId: "status-t4", navId: "nav-t4" }
+        ];
+
+        items.forEach((item) => {
+          const stEl = document.getElementById(item.statusId);
+          const navEl = document.getElementById(item.navId);
+          const chk = navEl ? navEl.querySelector(".check-badge") : null;
+
+          if (item.done) {
+            stEl.textContent = "✅ Selesai";
+            stEl.className = "text-xs font-bold px-3.5 py-1.5 rounded-full bg-emerald-100 text-emerald-800";
+            if (chk) chk.classList.remove("hidden");
+            if (navEl) navEl.classList.add("bg-emerald-50", "text-emerald-800");
+          } else {
+            if (chk) chk.classList.add("hidden");
+            if (navEl) navEl.classList.remove("bg-emerald-50", "text-emerald-800");
+          }
+        });
+
+        if (appState.jump10Done && appState.jump100Done) {
+          document.getElementById("unlocked-formula-card").classList.remove("hidden");
+        }
+
+        saveState();
+      }
+
+      function markStageDone(key) {
+        if (!appState[key]) {
+          appState[key] = true;
+          updateProgressUI();
+        }
+      }
+
+      document.getElementById("btn-reset-progress").addEventListener("click", () => {
+        appState = { ...defaultState };
+        document.getElementById("status-t1").textContent = "🎯 Misi: Coba minimal 2 preset / mode kustom";
+        document.getElementById("status-t1").className = "text-xs font-bold px-3.5 py-1.5 rounded-full bg-slate-100 text-slate-600";
+        document.getElementById("status-t2").textContent = "🎯 Misi: Tebak jumlah panah ke U₁₀ & U₁₀₀ untuk membuka rumus";
+        document.getElementById("status-t2").className = "text-xs font-bold px-3.5 py-1.5 rounded-full bg-slate-100 text-slate-600";
+        document.getElementById("status-t3").textContent = "🎯 Misi: Kunci (a & b) lalu hitung minimal 1 suku besar";
+        document.getElementById("status-t3").className = "text-xs font-bold px-3.5 py-1.5 rounded-full bg-slate-100 text-slate-600";
+        document.getElementById("status-t4").textContent = "🎯 Misi: Selesaikan minimal 3 dari 4 soal dengan benar";
+        document.getElementById("status-t4").className = "text-xs font-bold px-3.5 py-1.5 rounded-full bg-slate-100 text-slate-600";
+
+        document.getElementById("input-jump-10").value = "";
+        document.getElementById("input-jump-100").value = "";
+        document.getElementById("fb-jump-10").textContent = "";
+        document.getElementById("fb-jump-100").textContent = "";
+        document.getElementById("unlocked-formula-card").classList.add("hidden");
+
+        updateProgressUI();
+        generateAdaptiveQuiz();
+      });
+
+      /* --------------------------------------------------------------------
+         2. TAHAP 1: GARIS BILANGAN & PANAH LENGKUNG (+b / -b)
+         -------------------------------------------------------------------- */
+      let t1A = 3;
+      let t1B = 4;
+
+      function formatSigned(num) {
+        return num > 0 ? `+${num}` : `${num}`;
+      }
+
+      function renderNumberLineStage() {
+        const terms = [0, 1, 2, 3, 4, 5].map((i) => t1A + i * t1B);
+        const svg = document.getElementById("svg-number-line");
+        const dirPill = document.getElementById("t1-direction-pill");
+        const conceptBox = document.getElementById("t1-concept-box");
+
+        document.getElementById("display-a-val").textContent = String(t1A);
+        const dispB = document.getElementById("display-b-val");
+        dispB.textContent = formatSigned(t1B);
+
+        const isPositive = t1B > 0;
+        const isNegative = t1B < 0;
+        const arcColor = isPositive ? "#10b981" : isNegative ? "#f43f5e" : "#64748b";
+        const pillBg = isPositive ? "#d1fae5" : isNegative ? "#ffe4e6" : "#f1f5f9";
+
+        if (isPositive) {
+          dispB.className = "text-emerald-600 font-extrabold";
+          dirPill.className = "text-xs font-extrabold px-3 py-1 rounded-full bg-emerald-100 text-emerald-800";
+          dirPill.textContent = `Beda Positif (${formatSigned(t1B)}) • Barisan Naik`;
+        } else if (isNegative) {
+          dispB.className = "text-rose-600 font-extrabold";
+          dirPill.className = "text-xs font-extrabold px-3 py-1 rounded-full bg-rose-100 text-rose-800";
+          dirPill.textContent = `Beda Negatif (${formatSigned(t1B)}) • Barisan Turun`;
+        } else {
+          dispB.className = "text-slate-600 font-extrabold";
+          dirPill.className = "text-xs font-extrabold px-3 py-1 rounded-full bg-slate-200 text-slate-700";
+          dirPill.textContent = "Beda Nol (0) • Barisan Konstan";
+        }
+
+        // Build SVG Number Line with 6 equally spaced term nodes (U1..U6) and curved arcs
+        const startX = 85;
+        const stepX = 130;
+        const lineY = 148;
+
+        let markup = `
+          <defs>
+            <marker id="arrow-diff" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+              <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="${arcColor}" />
+            </marker>
+          </defs>
+          <!-- Main horizontal number line axis -->
+          <line x1="35" y1="${lineY}" x2="785" y2="${lineY}" stroke="#cbd5e1" stroke-width="4" stroke-linecap="round" />
+        `;
+
+        // Draw curved jump arcs above the number line
+        for (let i = 0; i < 5; i++) {
+          const x1 = startX + i * stepX;
+          const x2 = startX + (i + 1) * stepX;
+          const midX = (x1 + x2) / 2;
+          const ctrlY = 52;
+
+          markup += `
+            <path d="M ${x1 + 10} ${lineY - 14} Q ${midX} ${ctrlY} ${x2 - 12} ${lineY - 16}"
+                  fill="none" stroke="${arcColor}" stroke-width="3" stroke-linecap="round"
+                  marker-end="url(#arrow-diff)" class="arc-animate" />
+            <rect x="${midX - 24}" y="54" width="48" height="24" rx="12" fill="${pillBg}" stroke="${arcColor}" stroke-width="1.5" />
+            <text x="${midX}" y="70" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="12" font-weight="800" fill="${arcColor}">
+              ${formatSigned(t1B)}
+            </text>
+          `;
+        }
+
+        // Draw Term Nodes U1..U6
+        const subs = ["₁", "₂", "₃", "₄", "₅", "₆"];
+        terms.forEach((val, idx) => {
+          const cx = startX + idx * stepX;
+          const isFirst = idx === 0;
+          const nodeFill = isFirst ? "#4f46e5" : "#0f172a";
+
+          markup += `
+            <circle cx="${cx}" cy="${lineY}" r="11" fill="${nodeFill}" stroke="#ffffff" stroke-width="3" />
+            <text x="${cx}" y="${lineY + 30}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="15" font-weight="800" fill="#0f172a">
+              ${val}
+            </text>
+            <text x="${cx}" y="${lineY + 50}" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-size="12" font-weight="700" fill="${isFirst ? "#4f46e5" : "#64748b"}">
+              ${isFirst ? "U₁ (a)" : "U" + subs[idx]}
+            </text>
+          `;
+        });
+
+        svg.innerHTML = markup;
+
+        // Update conceptual explanation box
+        const diff1 = terms[1] - terms[0];
+        const diff2 = terms[2] - terms[1];
+        conceptBox.innerHTML = `
+          <strong>Bukti Selisih Konstan:</strong> Pada barisan <span class="font-mono font-bold">${terms.join(", ")}</span>, perhatikan selisih dua suku yang berurutan:
+          <span class="font-mono bg-white px-2 py-0.5 rounded border border-indigo-200 font-bold">
+            U₂ − U₁ = (${terms[1]}) − (${terms[0]}) = ${formatSigned(diff1)}
+          </span>
+          dan
+          <span class="font-mono bg-white px-2 py-0.5 rounded border border-indigo-200 font-bold">
+            U₃ − U₂ = (${terms[2]}) − (${terms[1]}) = ${formatSigned(diff2)}
+          </span>.
+          Karena selisihnya selalu tetap yaitu <strong>b = ${formatSigned(t1B)}</strong>, maka barisan ini adalah <strong>Barisan Aritmetika</strong>!
+        `;
+      }
+
+      document.querySelectorAll(".t1-preset-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".t1-preset-btn").forEach((b) => {
+            b.className = "t1-preset-btn px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 transition";
+          });
+          btn.className = "t1-preset-btn active px-3.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold bg-indigo-600 text-white shadow-sm transition";
+
+          const type = btn.dataset.preset;
+          const customPanel = document.getElementById("custom-controls-panel");
+
+          if (type === "kustom") {
+            customPanel.classList.remove("hidden");
+          } else {
+            customPanel.classList.add("hidden");
+            if (type === "naik") { t1A = 3; t1B = 4; }
+            if (type === "turun") { t1A = 20; t1B = -3; }
+            if (type === "negatif") { t1A = -12; t1B = 5; }
+            document.getElementById("slider-a").value = t1A;
+            document.getElementById("input-num-a").value = t1A;
+            document.getElementById("slider-b").value = t1B;
+            document.getElementById("input-num-b").value = t1B;
+          }
+
+          renderNumberLineStage();
+          appState.presetCount += 1;
+          if (appState.presetCount >= 2) {
+            markStageDone("doneT1");
+          }
+        });
+      });
+
+      function syncCustomInputs(newA, newB) {
+        t1A = Math.max(-50, Math.min(50, Number(newA) || 0));
+        t1B = Math.max(-20, Math.min(20, Number(newB) || 0));
+        document.getElementById("slider-a").value = Math.max(-30, Math.min(40, t1A));
+        document.getElementById("input-num-a").value = t1A;
+        document.getElementById("slider-b").value = Math.max(-15, Math.min(15, t1B));
+        document.getElementById("input-num-b").value = t1B;
+        renderNumberLineStage();
+        markStageDone("doneT1");
+      }
+
+      document.getElementById("slider-a").addEventListener("input", (e) => syncCustomInputs(e.target.value, t1B));
+      document.getElementById("input-num-a").addEventListener("change", (e) => syncCustomInputs(e.target.value, t1B));
+      document.getElementById("slider-b").addEventListener("input", (e) => syncCustomInputs(t1A, e.target.value));
+      document.getElementById("input-num-b").addEventListener("change", (e) => syncCustomInputs(t1A, e.target.value));
+
+      /* --------------------------------------------------------------------
+         3. TAHAP 2: PENEMUAN TERBIMBING RUMUS Un = a + (n - 1)b
+         -------------------------------------------------------------------- */
+      function checkJumpUnlock() {
+        if (appState.jump10Done && appState.jump100Done) {
+          document.getElementById("unlocked-formula-card").classList.remove("hidden");
+          markStageDone("doneT2");
+        }
+      }
+
+      document.getElementById("btn-check-jump-10").addEventListener("click", () => {
+        const val = Number(document.getElementById("input-jump-10").value);
+        const fb = document.getElementById("fb-jump-10");
+        if (val === 9) {
+          fb.className = "text-xs font-bold text-emerald-700";
+          fb.textContent = "✅ Tepat! 10 − 1 = 9 loncatan.";
+          appState.jump10Done = true;
+          checkJumpUnlock();
+        } else {
+          fb.className = "text-xs font-bold text-rose-600";
+          fb.textContent = "❌ Kurangi 1 dari urutan sukunya (10 − 1).";
+        }
+      });
+
+      document.getElementById("btn-check-jump-100").addEventListener("click", () => {
+        const val = Number(document.getElementById("input-jump-100").value);
+        const fb = document.getElementById("fb-jump-100");
+        if (val === 99) {
+          fb.className = "text-xs font-bold text-emerald-700";
+          fb.textContent = "✅ Benar! 100 − 1 = 99 loncatan.";
+          appState.jump100Done = true;
+          checkJumpUnlock();
+        } else {
+          fb.className = "text-xs font-bold text-rose-600";
+          fb.textContent = "❌ Dari U₁ ke U₁₀₀ ada (100 − 1) loncatan.";
+        }
+      });
+
+      /* --------------------------------------------------------------------
+         4. TAHAP 3: SIMULATOR PENCARI SUKU KE-n & SUKU KE-100
+         -------------------------------------------------------------------- */
+      const simBank = [
+        { a: 5, b: 4 },
+        { a: 42, b: -5 },
+        { a: -8, b: 6 },
+        { a: 12, b: 7 },
+        { a: 100, b: -8 }
+      ];
+      let simBankIdx = 0;
+      let lockedA = 5;
+      let lockedB = 4;
+      let simUnlocked = false;
+      let currentTargetN = 100;
+      let predictionRevealed = true;
+
+      function loadSimSequence() {
+        const item = simBank[simBankIdx];
+        const seq = [0, 1, 2, 3, 4].map((i) => item.a + i * item.b);
+        document.getElementById("sim-sequence-display").textContent = `${seq.join(", ")}, ...`;
+        document.getElementById("sim-input-a").value = "";
+        document.getElementById("sim-input-b").value = "";
+        document.getElementById("fb-lock-ab").textContent = "";
+
+        simUnlocked = false;
+        document.getElementById("sim-lock-overlay").classList.remove("hidden");
+        const activeDiv = document.getElementById("sim-active-content");
+        activeDiv.classList.add("opacity-50", "pointer-events-none");
+      }
+
+      document.getElementById("btn-new-sim-seq").addEventListener("click", () => {
+        simBankIdx = (simBankIdx + 1) % simBank.length;
+        loadSimSequence();
+      });
+
+      document.getElementById("btn-lock-ab").addEventListener("click", () => {
+        const expected = simBank[simBankIdx];
+        const rawA = document.getElementById("sim-input-a").value.trim();
+        const rawB = document.getElementById("sim-input-b").value.trim();
+        const fb = document.getElementById("fb-lock-ab");
+
+        if (rawA === "" || rawB === "") {
+          fb.className = "text-xs font-bold text-rose-600 mt-2.5";
+          fb.textContent = "❌ Isi nilai a dan b terlebih dahulu.";
+          return;
+        }
+
+        if (Number(rawA) === expected.a && Number(rawB) === expected.b) {
+          lockedA = expected.a;
+          lockedB = expected.b;
+          simUnlocked = true;
+          fb.className = "text-xs font-bold text-emerald-700 mt-2.5";
+          fb.textContent = `✅ Terkunci! a = ${lockedA} dan b = ${formatSigned(lockedB)}. Simulator di bawah sekarang aktif!`;
+
+          document.getElementById("sim-lock-overlay").classList.add("hidden");
+          const activeDiv = document.getElementById("sim-active-content");
+          activeDiv.classList.remove("opacity-50", "pointer-events-none");
+
+          renderSimulatorBreakdown(currentTargetN);
+        } else {
+          fb.className = "text-xs font-bold text-rose-600 mt-2.5";
+          fb.textContent = `❌ Belum tepat. Periksa kembali U₁ sebagai a, dan U₂ − U₁ sebagai b.`;
+        }
+      });
+
+      function renderSimulatorBreakdown(n) {
+        if (!simUnlocked) return;
+        currentTargetN = Math.max(1, Math.min(10000, Number(n) || 100));
+        document.getElementById("sim-custom-n").value = currentTargetN;
+
+        const isChallenge = document.getElementById("toggle-prediction-mode").checked;
+        const predBox = document.getElementById("prediction-challenge-box");
+        const breakdownCard = document.getElementById("sim-breakdown-card");
+
+        document.getElementById("pred-target-label").textContent = `U_${currentTargetN}`;
+
+        const jumps = currentTargetN - 1;
+        const jumpProduct = jumps * lockedB;
+        const finalVal = lockedA + jumpProduct;
+
+        breakdownCard.innerHTML = `
+          <div class="text-xs font-sans font-extrabold uppercase tracking-wider text-indigo-700 mb-2">
+            Rincian Substitusi Rumus untuk Suku ke-${currentTargetN} (U<sub>${currentTargetN}</sub>)
+          </div>
+          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
+            <div><span class="text-slate-500">1. Rumus Umum:</span> <strong>U<sub>n</sub> = a + (n − 1)b</strong></div>
+            <div><span class="text-slate-500">2. Substitusi:</span> U<sub>${currentTargetN}</sub> = <strong>${lockedA}</strong> + (<strong>${currentTargetN}</strong> − 1) × (<strong>${formatSigned(lockedB)}</strong>)</div>
+            <div><span class="text-slate-500">3. Hitung Loncatan:</span> U<sub>${currentTargetN}</sub> = ${lockedA} + (<strong>${jumps}</strong> × ${formatSigned(lockedB)})</div>
+            <div><span class="text-slate-500">4. Hasil Kali Beda:</span> U<sub>${currentTargetN}</sub> = ${lockedA} + (${formatSigned(jumpProduct)})</div>
+            <div class="pt-2 mt-2 border-t border-slate-200 text-base sm:text-lg font-extrabold text-emerald-700">
+              Jadi, U<sub>${currentTargetN}</sub> = ${finalVal}
+            </div>
+          </div>
+        `;
+
+        if (isChallenge && !predictionRevealed) {
+          predBox.classList.remove("hidden");
+          breakdownCard.classList.add("hidden");
+        } else {
+          if (isChallenge) predBox.classList.remove("hidden");
+          else predBox.classList.add("hidden");
+          breakdownCard.classList.remove("hidden");
+          markStageDone("doneT3");
+        }
+      }
+
+      document.querySelectorAll(".sim-n-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".sim-n-btn").forEach((b) => {
+            b.className = "sim-n-btn px-3.5 py-2 rounded-xl text-xs font-mono font-extrabold bg-white border border-slate-300 hover:border-indigo-500 text-indigo-950 transition";
+          });
+          btn.className = "sim-n-btn px-3.5 py-2 rounded-xl text-xs font-mono font-extrabold bg-amber-500 text-white shadow-sm transition";
+
+          const isChallenge = document.getElementById("toggle-prediction-mode").checked;
+          predictionRevealed = !isChallenge;
+          document.getElementById("input-pred-answer").value = "";
+          document.getElementById("fb-prediction").textContent = "";
+          renderSimulatorBreakdown(Number(btn.dataset.targetN));
+        });
+      });
+
+      document.getElementById("btn-sim-run-custom-n").addEventListener("click", () => {
+        const isChallenge = document.getElementById("toggle-prediction-mode").checked;
+        predictionRevealed = !isChallenge;
+        document.getElementById("input-pred-answer").value = "";
+        document.getElementById("fb-prediction").textContent = "";
+        renderSimulatorBreakdown(document.getElementById("sim-custom-n").value);
+      });
+
+      document.getElementById("toggle-prediction-mode").addEventListener("change", (e) => {
+        predictionRevealed = !e.target.checked;
+        document.getElementById("input-pred-answer").value = "";
+        document.getElementById("fb-prediction").textContent = "";
+        renderSimulatorBreakdown(currentTargetN);
+      });
+
+      document.getElementById("btn-check-prediction").addEventListener("click", () => {
+        const userAns = Number(document.getElementById("input-pred-answer").value);
+        const expected = lockedA + (currentTargetN - 1) * lockedB;
+        const fb = document.getElementById("fb-prediction");
+
+        predictionRevealed = true;
+        renderSimulatorBreakdown(currentTargetN);
+
+        if (userAns === expected) {
+          fb.className = "text-xs font-bold text-emerald-700";
+          fb.textContent = `🎉 Tepat sekali! U_${currentTargetN} = ${expected}.`;
+        } else {
+          fb.className = "text-xs font-bold text-rose-600";
+          fb.textContent = `💡 Jawabanmu ${userAns}, hasil sebenarnya ${expected}. Lihat langkahnya di bawah!`;
+        }
+      });
+
+      /* --------------------------------------------------------------------
+         5. TAHAP 4: LATIHAN MANDIRI ADAPTIF (4 SOAL ACAM + PEMBAHASAN)
+         -------------------------------------------------------------------- */
+      let quizSolvedSet = new Set();
+
+      function randInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+      function generateAdaptiveQuiz() {
+        quizSolvedSet = new Set();
+        const container = document.getElementById("t4-quiz-container");
+
+        // Soal 1: Beda Positif (+b)
+        const a1 = randInt(3, 12);
+        const b1 = randInt(3, 7);
+        const n1 = randInt(12, 18);
+        const ans1 = a1 + (n1 - 1) * b1;
+
+        // Soal 2: Beda Negatif (-b)
+        const a2 = randInt(45, 75);
+        const b2 = -randInt(3, 6);
+        const n2 = randInt(10, 15);
+        const ans2 = a2 + (n2 - 1) * b2;
+
+        // Soal 3: Mencari U_100
+        const a3 = randInt(2, 9);
+        const b3 = randInt(2, 5);
+        const ans3 = a3 + 99 * b3;
+
+        // Soal 4: Soal Cerita Kontekstual (Menabung mingguan / susunan kursi)
+        const a4 = randInt(10, 20) * 1000;
+        const b4 = randInt(3, 6) * 1000;
+        const n4 = randInt(8, 12);
+        const ans4 = a4 + (n4 - 1) * b4;
+
+        const questions = [
+          {
+            id: 0,
+            tag: "Soal 1 • Beda Positif (+b)",
+            tagClass: "bg-emerald-100 text-emerald-800",
+            prompt: `Diketahui barisan aritmetika <strong class="font-mono">${a1}, ${a1 + b1}, ${a1 + 2 * b1}, ${a1 + 3 * b1}, ...</strong>. Tentukan nilai suku ke-${n1} (<strong>U<sub>${n1}</sub></strong>)!`,
+            answer: ans1,
+            solution: `Diketahui a = ${a1} dan b = +${b1}. Maka U<sub>${n1}</sub> = ${a1} + (${n1} − 1)(${b1}) = ${a1} + ${n1 - 1} × ${b1} = ${a1} + ${(n1 - 1) * b1} = <strong>${ans1}</strong>.`
+          },
+          {
+            id: 1,
+            tag: "Soal 2 • Beda Negatif (−b)",
+            tagClass: "bg-rose-100 text-rose-800",
+            prompt: `Diketahui barisan menurun <strong class="font-mono">${a2}, ${a2 + b2}, ${a2 + 2 * b2}, ${a2 + 3 * b2}, ...</strong>. Berapa nilai suku ke-${n2} (<strong>U<sub>${n2}</sub></strong>)?`,
+            answer: ans2,
+            solution: `Diketahui a = ${a2} dan b = ${b2}. Maka U<sub>${n2}</sub> = ${a2} + (${n2} − 1)(${b2}) = ${a2} + (${(n2 - 1) * b2}) = <strong>${ans2}</strong>.`
+          },
+          {
+            id: 2,
+            tag: "Soal 3 • Target U₁₀₀",
+            tagClass: "bg-indigo-100 text-indigo-800",
+            prompt: `Tentukan suku ke-100 (<strong>U<sub>100</sub></strong>) dari barisan bilangan <strong class="font-mono">${a3}, ${a3 + b3}, ${a3 + 2 * b3}, ${a3 + 3 * b3}, ...</strong>!`,
+            answer: ans3,
+            solution: `Dari U₁ ke U₁₀₀ ada 99 loncatan. Dengan a = ${a3} dan b = ${b3}, maka U<sub>100</sub> = ${a3} + 99(${b3}) = ${a3} + ${99 * b3} = <strong>${ans3}</strong>.`
+          },
+          {
+            id: 3,
+            tag: "Soal 4 • Kontekstual",
+            tagClass: "bg-amber-100 text-amber-900",
+            prompt: `Raka menabung di minggu pertama sebesar <strong>Rp${a4.toLocaleString("id-ID")}</strong>. Setiap minggu berikutnya ia menambah tabungan tetap sebesar <strong>Rp${b4.toLocaleString("id-ID")}</strong> dari minggu sebelumnya. Berapa rupiah uang yang ditabung Raka tepat pada <strong>minggu ke-${n4}</strong>?`,
+            answer: ans4,
+            solution: `a = ${a4} dan b = ${b4}. U<sub>${n4}</sub> = ${a4} + (${n4} − 1)(${b4}) = ${a4} + ${(n4 - 1) * b4} = <strong>Rp${ans4.toLocaleString("id-ID")}</strong>.`
+          }
+        ];
+
+        container.innerHTML = "";
+        questions.forEach((q) => {
+          const card = document.createElement("div");
+          card.className = "bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 flex flex-col justify-between space-y-3";
+
+          card.innerHTML = `
+            <div class="space-y-2">
+              <span class="inline-block text-[11px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full ${q.tagClass}">
+                ${q.tag}
+              </span>
+              <p class="text-xs sm:text-sm text-slate-800 leading-relaxed">${q.prompt}</p>
+            </div>
+
+            <div class="space-y-2 pt-1">
+              <div class="flex items-center gap-2">
+                <input type="number" id="t4-inp-${q.id}" placeholder="Jawaban angka..." class="w-40 px-3 py-1.5 rounded-xl border-2 border-slate-300 bg-white font-mono text-sm font-extrabold focus:outline-none focus:border-indigo-600" />
+                <button type="button" data-qid="${q.id}" class="t4-check-btn px-4 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition">
+                  Periksa
+                </button>
+              </div>
+              <p id="t4-fb-${q.id}" class="text-xs font-bold min-h-[16px]"></p>
+              <div id="t4-sol-${q.id}" class="hidden text-xs text-slate-700 bg-white border border-slate-200 rounded-xl p-3 leading-relaxed">
+                <strong>Pembahasan:</strong> ${q.solution}
+              </div>
+            </div>
+          `;
+
+          container.appendChild(card);
+        });
+
+        document.querySelectorAll(".t4-check-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const qid = Number(btn.dataset.qid);
+            const qObj = questions[qid];
+            const inp = document.getElementById(`t4-inp-${qid}`);
+            const fb = document.getElementById(`t4-fb-${qid}`);
+            const sol = document.getElementById(`t4-sol-${qid}`);
+            const raw = inp.value.trim();
+
+            sol.classList.remove("hidden");
+
+            if (raw !== "" && Number(raw) === qObj.answer) {
+              inp.classList.remove("border-slate-300", "border-rose-500");
+              inp.classList.add("border-emerald-500", "bg-emerald-50");
+              fb.className = "text-xs font-bold text-emerald-700";
+              fb.textContent = "✅ Benar! Kerja bagus.";
+              quizSolvedSet.add(qid);
+              if (quizSolvedSet.size >= 3) {
+                markStageDone("doneT4");
+              }
+            } else {
+              inp.classList.remove("border-slate-300", "border-emerald-500");
+              inp.classList.add("border-rose-500", "bg-rose-50");
+              fb.className = "text-xs font-bold text-rose-600";
+              fb.textContent = `❌ Kurang tepat. Pelajari pembahasannya di bawah ini.`;
+            }
+          });
+        });
+      }
+
+      document.getElementById("btn-regen-t4").addEventListener("click", generateAdaptiveQuiz);
+
+      /* --------------------------------------------------------------------
+         6. INITIALIZATION
+         -------------------------------------------------------------------- */
+      updateProgressUI();
+      renderNumberLineStage();
+      loadSimSequence();
+      generateAdaptiveQuiz();
+    })();
+  </script>
+</body>
+</html>

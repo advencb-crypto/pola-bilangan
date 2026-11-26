@@ -1,0 +1,1724 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NŪMA (Number Numen) — Algebra | Modul 5: Penerapan &amp; Literasi Numerasi Pola Bilangan</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+      overflow-x: hidden;
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    @keyframes popScale {
+      0% {
+        opacity: 0;
+        transform: scale(0.92) translateY(8px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .animate-pop {
+      animation: popScale 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    /* Custom clean range input styling */
+    input[type="range"] {
+      accent-color: #4f46e5;
+    }
+  </style>
+</head>
+<body class="pb-16 antialiased selection:bg-indigo-100 selection:text-indigo-900">
+
+  <!-- ======================================================================
+       1. STICKY HEADER & AUTOMATIC PROGRESS TRACKER (0% - 100%)
+       ====================================================================== -->
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      <!-- Brand & Module Title -->
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-indigo-950 via-indigo-600 to-violet-600 text-white flex items-center justify-center font-extrabold text-lg tracking-tight shadow-md shadow-indigo-600/20 shrink-0">
+          NŪ
+        </div>
+        <div>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-[11px] font-extrabold uppercase tracking-wider bg-indigo-100 text-indigo-800 px-2.5 py-0.5 rounded-full">
+              NŪMA — ALGEBRA • MODUL 5 DARI 5 (MODUL PENUTUP)
+            </span>
+          </div>
+          <h1 class="text-base sm:text-lg font-extrabold text-indigo-950 leading-tight mt-0.5">
+            Penerapan &amp; Literasi Numerasi Pola Bilangan
+          </h1>
+        </div>
+      </div>
+
+      <!-- Home Link & Progress Indicator -->
+      <div class="flex items-center gap-2.5 flex-wrap">
+        <a href="index.html" class="text-xs font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-600 hover:text-white border border-indigo-200 px-3.5 py-2 rounded-full transition">
+          ← Beranda Seri
+        </a>
+
+        <div class="flex items-center gap-2.5 bg-slate-100 border border-slate-200 px-3.5 py-1.5 rounded-full" title="Progres penyelesaian 4 bagian utama modul ini">
+          <span class="text-xs font-bold text-slate-700">Progres</span>
+          <div class="w-24 h-2 bg-slate-200 rounded-full overflow-hidden">
+            <div id="progress-bar" class="h-full w-0 bg-gradient-to-r from-indigo-600 via-violet-600 to-emerald-500 rounded-full transition-all duration-500"></div>
+          </div>
+          <span id="progress-text" class="text-xs font-extrabold font-mono text-emerald-600 min-w-[34px] text-right">0%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Anchor Navigation Bar -->
+    <nav class="bg-slate-50 border-t border-slate-200 overflow-x-auto no-scrollbar" aria-label="Navigasi Cepat 4 Bagian">
+      <div class="max-w-6xl mx-auto px-4 py-2 flex items-center gap-2">
+        <a href="#bagian-kursi" id="nav-kursi" class="text-xs font-semibold text-slate-600 hover:bg-indigo-100 hover:text-indigo-900 px-3 py-1.5 rounded-full whitespace-nowrap transition flex items-center gap-1.5">
+          <span class="check-icon hidden text-emerald-600 font-extrabold">✓</span>
+          <span>1. Simulator Kursi Aula</span>
+        </a>
+        <a href="#bagian-ubin" id="nav-ubin" class="text-xs font-semibold text-slate-600 hover:bg-indigo-100 hover:text-indigo-900 px-3 py-1.5 rounded-full whitespace-nowrap transition flex items-center gap-1.5">
+          <span class="check-icon hidden text-emerald-600 font-extrabold">✓</span>
+          <span>2. Pola Ubin &amp; Manik</span>
+        </a>
+        <a href="#bagian-tabungan" id="nav-tabungan" class="text-xs font-semibold text-slate-600 hover:bg-indigo-100 hover:text-indigo-900 px-3 py-1.5 rounded-full whitespace-nowrap transition flex items-center gap-1.5">
+          <span class="check-icon hidden text-emerald-600 font-extrabold">✓</span>
+          <span>3. Simulasi Tabungan</span>
+        </a>
+        <a href="#bagian-akm" id="nav-akm" class="text-xs font-semibold text-slate-600 hover:bg-indigo-100 hover:text-indigo-900 px-3 py-1.5 rounded-full whitespace-nowrap transition flex items-center gap-1.5">
+          <span class="check-icon hidden text-emerald-600 font-extrabold">✓</span>
+          <span>4. Asesmen Literasi (AKM)</span>
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 pt-6 space-y-8">
+
+    <!-- ====================================================================
+         HERO BANNER & RINGKASAN ALUR BELAJAR MANDIRI
+         ==================================================================== -->
+    <section class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-950 via-indigo-800 to-violet-700 text-white p-6 sm:p-8 shadow-xl shadow-indigo-950/15">
+      <div class="absolute -right-12 -bottom-12 w-72 h-72 rounded-full bg-amber-400/15 blur-2xl pointer-events-none"></div>
+      <div class="relative z-10">
+        <div class="max-w-3xl">
+          <span class="inline-flex items-center gap-1.5 bg-white/15 border border-white/20 text-amber-300 text-xs font-bold px-3.5 py-1 rounded-full mb-3">
+            🧭 Modul Penutup Pra-Pembelajaran • Matematika SMP Kelas 8
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold leading-snug mb-3">
+            Pola Bilangan di Dunia Nyata: Dari Kursi Bioskop hingga Rencana Tabungan!
+          </h2>
+          <p class="text-sm sm:text-base text-indigo-100 leading-relaxed mb-5">
+            Selamat tiba di modul terakhir seri <strong>NŪMA — Algebra</strong>! Di sini kamu akan mempraktikkan semua konsep pola bilangan ke dalam situasi kehidupan nyata: menghitung kapasitas kursi gedung pertunjukan, merancang motif ubin &amp; gelang manik-manik, membandingkan strategi menabung, hingga menaklukkan soal literasi numerasi tipe <strong>AKM / ASAS</strong>.
+          </p>
+        </div>
+
+        <!-- 4-Step Self-Paced Flow Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
+          <a href="#bagian-kursi" class="bg-white/10 hover:bg-white/15 border border-white/15 rounded-2xl p-3.5 transition block">
+            <div class="text-[11px] font-extrabold uppercase tracking-wider text-amber-300 mb-0.5">Tahap 1</div>
+            <div class="text-sm font-bold text-white">Simulator Kursi Aula</div>
+            <p class="text-xs text-indigo-200 mt-0.5">Bedakan kursi baris ke-n (U<sub>n</sub>) &amp; total kursi (S<sub>n</sub>).</p>
+          </a>
+          <a href="#bagian-ubin" class="bg-white/10 hover:bg-white/15 border border-white/15 rounded-2xl p-3.5 transition block">
+            <div class="text-[11px] font-extrabold uppercase tracking-wider text-emerald-300 mb-0.5">Tahap 2</div>
+            <div class="text-sm font-bold text-white">Pola Ubin &amp; Manik</div>
+            <p class="text-xs text-indigo-200 mt-0.5">Eksplorasi grid ubin taman &amp; pola warna berulang.</p>
+          </a>
+          <a href="#bagian-tabungan" class="bg-white/10 hover:bg-white/15 border border-white/15 rounded-2xl p-3.5 transition block">
+            <div class="text-[11px] font-extrabold uppercase tracking-wider text-violet-200 mb-0.5">Tahap 3</div>
+            <div class="text-sm font-bold text-white">Studio Tabungan</div>
+            <p class="text-xs text-indigo-200 mt-0.5">Bandingkan strategi tabungan aritmetika vs geometri.</p>
+          </a>
+          <a href="#bagian-akm" class="bg-white/10 hover:bg-white/15 border border-white/15 rounded-2xl p-3.5 transition block">
+            <div class="text-[11px] font-extrabold uppercase tracking-wider text-rose-300 mb-0.5">Tahap 4</div>
+            <div class="text-sm font-bold text-white">Asesmen AKM / ASAS</div>
+            <p class="text-xs text-indigo-200 mt-0.5">4 soal literasi kontekstual + sertifikat kelulusan.</p>
+          </a>
+        </div>
+
+        <div class="pt-3.5 border-t border-white/15 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-indigo-200">
+          <span>👩‍🏫 Dikembangkan oleh: <strong class="text-white">Lusia Adven Ningrum • Matematika SMP Kelas 8</strong></span>
+          <span class="hidden sm:inline">•</span>
+          <span>🎯 Target: <strong class="text-amber-300">Selesaikan ke-4 tahap untuk membuka Sertifikat Penyelesaian Seri NŪMA</strong></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         BAGIAN 1: SIMULATOR SUSUNAN KURSI GEDUNG PERTUNJUKAN / BIOSKOP
+         ==================================================================== -->
+    <section id="bagian-kursi" class="scroll-mt-28 bg-white rounded-2xl border border-slate-200 p-5 sm:p-8 shadow-sm">
+      <div class="flex flex-wrap items-start justify-between gap-3 pb-4 mb-6 border-b border-slate-100">
+        <div>
+          <span class="inline-block bg-indigo-100 text-indigo-900 text-xs font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-md mb-1.5">
+            Bagian 1 • Aplikasi Barisan &amp; Akumulasi Jumlah Baris
+          </span>
+          <h3 class="text-xl sm:text-2xl font-extrabold text-indigo-950">
+            Simulator Susunan Kursi Gedung Pertunjukan / Bioskop
+          </h3>
+        </div>
+        <span id="status-kursi" class="text-xs font-bold px-3.5 py-1.5 rounded-full bg-slate-100 text-slate-600">
+          🎯 Misi: Selesaikan 3 langkah soal cerita aula di bawah
+        </span>
+      </div>
+
+      <!-- Interactive Controls -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6">
+        <!-- Left Controls Panel -->
+        <div class="lg:col-span-5 bg-slate-50 border border-slate-200 rounded-2xl p-5 flex flex-col justify-between gap-4">
+          <div class="space-y-4">
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <label for="slider-seat-rows" class="text-xs sm:text-sm font-extrabold text-indigo-950">
+                  Jumlah Baris Kursi (n)
+                </label>
+                <span id="label-seat-rows" class="font-mono text-sm font-extrabold bg-indigo-600 text-white px-3 py-0.5 rounded-full">
+                  8 Baris
+                </span>
+              </div>
+              <input type="range" id="slider-seat-rows" min="1" max="12" value="8" class="w-full cursor-pointer" />
+              <div class="flex justify-between text-[11px] font-mono text-slate-500 mt-1">
+                <span>1 baris</span>
+                <span>6 baris</span>
+                <span>12 baris</span>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label for="input-seat-a" class="block text-xs font-bold text-slate-700 mb-1">
+                  Kursi Baris ke-1 (a)
+                </label>
+                <input type="number" id="input-seat-a" min="4" max="20" value="10" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white font-mono text-sm font-extrabold text-indigo-950 focus:outline-none focus:border-indigo-600" />
+              </div>
+              <div>
+                <label for="input-seat-b" class="block text-xs font-bold text-slate-700 mb-1">
+                  Tambah per Baris (b)
+                </label>
+                <input type="number" id="input-seat-b" min="1" max="6" value="3" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white font-mono text-sm font-extrabold text-indigo-950 focus:outline-none focus:border-indigo-600" />
+              </div>
+            </div>
+
+            <!-- Presets -->
+            <div>
+              <span class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Preset Cepat:</span>
+              <div class="flex flex-wrap gap-2">
+                <button type="button" data-seat-preset="10,3,8" class="seat-preset-btn text-xs font-bold px-3 py-1.5 rounded-xl bg-indigo-600 text-white shadow-sm transition">
+                  Aula Sekolah (a=10, b=3, n=8)
+                </button>
+                <button type="button" data-seat-preset="12,4,10" class="seat-preset-btn text-xs font-bold px-3 py-1.5 rounded-xl bg-white text-slate-700 border border-slate-300 hover:border-indigo-400 transition">
+                  Bioskop Mini (a=12, b=4, n=10)
+                </button>
+                <button type="button" data-seat-preset="8,2,12" class="seat-preset-btn text-xs font-bold px-3 py-1.5 rounded-xl bg-white text-slate-700 border border-slate-300 hover:border-indigo-400 transition">
+                  Teater Studio (a=8, b=2, n=12)
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Toggle Highlight Last Row -->
+          <div class="pt-3 border-t border-slate-200 flex items-center justify-between gap-2">
+            <button type="button" id="btn-highlight-last-row" aria-pressed="true" class="w-full py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-extrabold text-xs sm:text-sm shadow-sm transition flex items-center justify-center gap-2">
+              <span>🔦</span>
+              <span id="text-highlight-last-row">Sorotan Baris Terakhir: AKTIF</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Right SVG Auditorium Stage + Seating Visual -->
+        <div class="lg:col-span-7 bg-slate-900 rounded-2xl p-4 sm:p-5 border border-slate-800 text-white flex flex-col justify-between">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+            <span class="text-xs font-bold text-indigo-200">Denah Kursi Penonton (Tampak Atas)</span>
+            <div class="flex items-center gap-3 text-[11px] text-slate-300">
+              <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-sm bg-indigo-400 inline-block"></span> Baris 1..n−1</span>
+              <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-sm bg-amber-400 inline-block"></span> Baris Terakhir (U<sub>n</sub>)</span>
+            </div>
+          </div>
+
+          <div class="w-full overflow-x-auto">
+            <svg id="svg-auditorium" viewBox="0 0 640 340" class="w-full h-auto min-w-[440px] select-none" role="img" aria-label="Visualisasi denah kursi gedung pertunjukan"></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Real-Time Statistics Panel: U_n vs S_n -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-4 mb-7">
+        <div class="md:col-span-4 bg-amber-50 border-2 border-amber-300 rounded-2xl p-4">
+          <div class="text-[11px] font-extrabold uppercase tracking-wider text-amber-800 mb-1">
+            Kursi pada Baris Terakhir (U<sub>n</sub>)
+          </div>
+          <div id="stat-seat-un" class="font-mono text-2xl sm:text-3xl font-extrabold text-amber-700">
+            31 kursi
+          </div>
+          <p id="stat-seat-un-desc" class="text-xs text-slate-700 mt-1">
+            Hanya menghitung kursi di <strong>Baris ke-8</strong> saja.
+          </p>
+        </div>
+
+        <div class="md:col-span-4 bg-emerald-50 border-2 border-emerald-300 rounded-2xl p-4">
+          <div class="text-[11px] font-extrabold uppercase tracking-wider text-emerald-800 mb-1">
+            Total Seluruh Kursi di Gedung (S<sub>n</sub>)
+          </div>
+          <div id="stat-seat-sn" class="font-mono text-2xl sm:text-3xl font-extrabold text-emerald-700">
+            164 kursi
+          </div>
+          <p id="stat-seat-sn-desc" class="text-xs text-slate-700 mt-1">
+            Akumulasi seluruh kursi dari <strong>Baris ke-1 s.d. ke-8</strong>.
+          </p>
+        </div>
+
+        <div class="md:col-span-4 bg-indigo-50 border border-indigo-200 rounded-2xl p-4 flex flex-col justify-center">
+          <div class="text-[11px] font-extrabold uppercase tracking-wider text-indigo-800 mb-1">
+            Rincian Penjumlahan Baris demi Baris
+          </div>
+          <div id="stat-seat-breakdown" class="font-mono text-xs sm:text-sm font-bold text-indigo-950 leading-relaxed break-words">
+            10 + 13 + 16 + 19 + 22 + 25 + 28 + 31 = 164
+          </div>
+        </div>
+      </div>
+
+      <!-- 3-Step Scaffolding Story Problem -->
+      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 sm:p-6">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <span class="inline-block text-xs font-extrabold uppercase tracking-wider bg-indigo-600 text-white px-3 py-1 rounded-full">
+            📝 Soal Cerita Bertahap (3 Langkah Scaffolding)
+          </span>
+          <button type="button" id="btn-load-story-preset" class="text-xs font-bold text-indigo-700 hover:underline">
+            ↻ Sesuaikan Simulator ke Soal (a=10, b=3, n=8)
+          </button>
+        </div>
+
+        <p class="text-xs sm:text-sm text-slate-700 leading-relaxed mb-5 bg-white p-4 rounded-xl border border-slate-200">
+          <strong>Konteks Masalah:</strong> Aula Pertunjukan SMP Nusantara memiliki <strong>8 baris kursi</strong>. Baris paling depan (baris ke-1) berisi <strong>10 kursi</strong>, baris ke-2 berisi <strong>13 kursi</strong>, baris ke-3 berisi <strong>16 kursi</strong>, dan seterusnya selalu bertambah tetap.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Step 1 -->
+          <div class="bg-white border-2 border-slate-200 rounded-2xl p-4 flex flex-col justify-between gap-3">
+            <div>
+              <span class="text-[11px] font-extrabold uppercase tracking-wider text-indigo-600">Langkah 1 • Suku ke-8 (U<sub>8</sub>)</span>
+              <p class="text-xs sm:text-sm font-bold text-slate-800 mt-1">
+                Berapa tambahan kursi tiap baris (<em>b</em>) dan banyak kursi pada baris paling belakang (<strong>U<sub>8</sub></strong>)?
+              </p>
+            </div>
+            <div class="space-y-2">
+              <div class="flex items-center gap-2">
+                <label for="step1-b" class="text-xs font-bold text-slate-600 w-14">b =</label>
+                <input type="number" id="step1-b" placeholder="?" class="w-full px-3 py-1.5 rounded-xl border border-slate-300 font-mono text-sm font-extrabold text-center focus:outline-none focus:border-indigo-600" />
+              </div>
+              <div class="flex items-center gap-2">
+                <label for="step1-u8" class="text-xs font-bold text-slate-600 w-14">U<sub>8</sub> =</label>
+                <input type="number" id="step1-u8" placeholder="?" class="w-full px-3 py-1.5 rounded-xl border border-slate-300 font-mono text-sm font-extrabold text-center focus:outline-none focus:border-indigo-600" />
+              </div>
+              <button type="button" id="btn-check-step1" class="w-full py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition">
+                Cek Langkah 1
+              </button>
+              <p id="fb-step1" class="text-xs font-bold"></p>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="bg-white border-2 border-slate-200 rounded-2xl p-4 flex flex-col justify-between gap-3">
+            <div>
+              <span class="text-[11px] font-extrabold uppercase tracking-wider text-violet-600">Langkah 2 • Total Kursi (S<sub>8</sub>)</span>
+              <p class="text-xs sm:text-sm font-bold text-slate-800 mt-1">
+                Hitung <strong>total seluruh kursi</strong> di aula tersebut (<strong>S<sub>8</sub></strong>)! <span class="font-normal text-slate-500">(Petunjuk: pasangkan U<sub>1</sub> + U<sub>8</sub> = 10 + 31 = 41 sebanyak 4 pasang)</span>
+              </p>
+            </div>
+            <div class="space-y-2">
+              <div class="flex items-center gap-2">
+                <label for="step2-s8" class="text-xs font-bold text-slate-600 w-14">S<sub>8</sub> =</label>
+                <input type="number" id="step2-s8" placeholder="?" class="w-full px-3 py-1.5 rounded-xl border border-slate-300 font-mono text-sm font-extrabold text-center focus:outline-none focus:border-indigo-600" />
+              </div>
+              <button type="button" id="btn-check-step2" class="w-full py-2 rounded-xl bg-violet-600 hover:bg-violet-700 text-white font-bold text-xs transition">
+                Cek Langkah 2
+              </button>
+              <p id="fb-step2" class="text-xs font-bold"></p>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="bg-white border-2 border-slate-200 rounded-2xl p-4 flex flex-col justify-between gap-3">
+            <div>
+              <span class="text-[11px] font-extrabold uppercase tracking-wider text-emerald-600">Langkah 3 • Pendapatan Tiket</span>
+              <p class="text-xs sm:text-sm font-bold text-slate-800 mt-1">
+                Jika tiket <strong>baris 1–3 (VIP)</strong> Rp50.000/kursi dan <strong>baris 4–8 (Reguler)</strong> Rp30.000/kursi, berapa pendapatan maksimal aula (dalam Rupiah)?
+              </p>
+            </div>
+            <div class="space-y-2">
+              <div class="flex items-center gap-2">
+                <label for="step3-rev" class="text-xs font-bold text-slate-600 shrink-0">Rp</label>
+                <input type="number" id="step3-rev" placeholder="Contoh: 5700000" class="w-full px-3 py-1.5 rounded-xl border border-slate-300 font-mono text-sm font-extrabold text-center focus:outline-none focus:border-indigo-600" />
+              </div>
+              <button type="button" id="btn-check-step3" class="w-full py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition">
+                Cek Langkah 3
+              </button>
+              <p id="fb-step3" class="text-xs font-bold"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         BAGIAN 2: SIMULATOR POLA UBIN TAMAN & MANIK-MANIK (KONTEKSTUAL)
+         ==================================================================== -->
+    <section id="bagian-ubin" class="scroll-mt-28 bg-white rounded-2xl border border-slate-200 p-5 sm:p-8 shadow-sm">
+      <div class="flex flex-wrap items-start justify-between gap-3 pb-4 mb-6 border-b border-slate-100">
+        <div>
+          <span class="inline-block bg-violet-100 text-violet-900 text-xs font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-md mb-1.5">
+            Bagian 2 • Konfigurasi Grid &amp; Pola Berulang (Modulo)
+          </span>
+          <h3 class="text-xl sm:text-2xl font-extrabold text-indigo-950">
+            Simulator Pola Ubin Taman &amp; Gelang Manik-Manik
+          </h3>
+        </div>
+        <span id="status-ubin" class="text-xs font-bold px-3.5 py-1.5 rounded-full bg-slate-100 text-slate-600">
+          🎯 Misi: Eksplorasi kedua tab &amp; jawab Micro-Check
+        </span>
+      </div>
+
+      <!-- Tab Buttons -->
+      <div class="flex flex-wrap gap-2 mb-6" role="tablist">
+        <button type="button" id="tab-btn-tile" role="tab" aria-selected="true" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold bg-indigo-600 text-white shadow-sm transition">
+          🟦 Tab A: Pola Ubin Kolam &amp; Taman
+        </button>
+        <button type="button" id="tab-btn-bead" role="tab" aria-selected="false" class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 transition">
+          📿 Tab B: Pola Gelang Manik-Manik Berulang
+        </button>
+      </div>
+
+      <!-- TAB A: POLA UBIN KOLAM & TAMAN -->
+      <div id="panel-tile" class="space-y-6">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          <!-- Controls & Breakdown -->
+          <div class="lg:col-span-5 bg-slate-50 border border-slate-200 rounded-2xl p-5 space-y-4">
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <label for="slider-tile-n" class="text-xs sm:text-sm font-extrabold text-indigo-950">
+                  Tahap Desain Kolam (n)
+                </label>
+                <span id="label-tile-n" class="font-mono text-sm font-extrabold bg-indigo-600 text-white px-3 py-0.5 rounded-full">
+                  Tahap n = 3
+                </span>
+              </div>
+              <input type="range" id="slider-tile-n" min="1" max="8" value="3" class="w-full cursor-pointer" />
+              <div class="flex justify-between text-[11px] font-mono text-slate-500 mt-1">
+                <span>n = 1</span>
+                <span>n = 4</span>
+                <span>n = 8</span>
+              </div>
+            </div>
+
+            <div class="space-y-2.5">
+              <div class="bg-blue-50 border border-blue-200 rounded-xl p-3 flex items-center justify-between">
+                <div>
+                  <div class="text-xs font-extrabold text-blue-900">🟦 Ubin Tengah (Kolam Biru)</div>
+                  <div id="tile-blue-formula" class="font-mono text-[11px] text-blue-700">Ukuran 3 × 3 = n²</div>
+                </div>
+                <div id="tile-blue-count" class="font-mono text-xl font-extrabold text-blue-700">9</div>
+              </div>
+
+              <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 flex items-center justify-between">
+                <div>
+                  <div class="text-xs font-extrabold text-amber-900">🟧 Ubin Tepi (Bingkai Terakota)</div>
+                  <div id="tile-border-formula" class="font-mono text-[11px] text-amber-700">4n + 4 = 4(3) + 4</div>
+                </div>
+                <div id="tile-border-count" class="font-mono text-xl font-extrabold text-amber-600">16</div>
+              </div>
+
+              <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3 flex items-center justify-between">
+                <div>
+                  <div class="text-xs font-extrabold text-emerald-900">🟩 Total Seluruh Ubin</div>
+                  <div id="tile-total-formula" class="font-mono text-[11px] text-emerald-700">(n + 2)² = 5 × 5</div>
+                </div>
+                <div id="tile-total-count" class="font-mono text-xl font-extrabold text-emerald-700">25</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SVG Grid Visualizer -->
+          <div class="lg:col-span-7 bg-slate-900 rounded-2xl p-5 border border-slate-800 flex flex-col items-center justify-center">
+            <div class="text-xs font-bold text-slate-300 mb-3 text-center">
+              Visualisasi Grid Ubin (<span id="tile-grid-dim" class="font-mono text-amber-300">5 × 5 ubin</span>)
+            </div>
+            <svg id="svg-tile-grid" viewBox="0 0 320 320" class="w-full max-w-[310px] h-auto select-none" role="img" aria-label="Grid pola ubin kolam dan taman"></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB B: POLA GELANG MANIK-MANIK BERULANG -->
+      <div id="panel-bead" class="hidden space-y-6">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          <!-- Controls & Modulo Explanation -->
+          <div class="lg:col-span-5 bg-slate-50 border border-slate-200 rounded-2xl p-5 space-y-4">
+            <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+              Sebuah gelang merangkai manik-manik berulang setiap <strong>4 warna</strong>:
+              <span class="font-bold text-rose-600">1. Merah</span>,
+              <span class="font-bold text-amber-600">2. Kuning</span>,
+              <span class="font-bold text-emerald-600">3. Hijau</span>,
+              <span class="font-bold text-indigo-600">4. Biru</span>.
+            </p>
+
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <label for="input-bead-n" class="text-xs sm:text-sm font-extrabold text-indigo-950">
+                  Cari Manik ke-n (bisa s.d. 2026!):
+                </label>
+                <div class="flex gap-1.5">
+                  <button type="button" data-bead-quick="14" class="bead-quick-btn text-[11px] font-mono font-bold px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 hover:bg-indigo-200">14</button>
+                  <button type="button" data-bead-quick="100" class="bead-quick-btn text-[11px] font-mono font-bold px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 hover:bg-indigo-200">100</button>
+                  <button type="button" data-bead-quick="2026" class="bead-quick-btn text-[11px] font-mono font-bold px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 hover:bg-indigo-200">2026</button>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-3">
+                <input type="range" id="slider-bead-n" min="1" max="40" value="14" class="flex-1 cursor-pointer" />
+                <input type="number" id="input-bead-n" min="1" max="99999" value="14" class="w-24 px-2.5 py-1.5 rounded-xl border border-slate-300 bg-white font-mono text-sm font-extrabold text-center text-indigo-950 focus:outline-none focus:border-indigo-600" />
+              </div>
+            </div>
+
+            <!-- Modulo Result Card -->
+            <div id="bead-result-box" class="bg-white border-2 border-indigo-200 rounded-2xl p-4 space-y-2">
+              <div class="text-xs font-extrabold uppercase tracking-wider text-indigo-700">
+                Analisis Sisa Pembagian (Modulo 4)
+              </div>
+              <div id="bead-modulo-calc" class="font-mono text-sm font-extrabold text-slate-900">
+                14 ÷ 4 = 3 kelompok penuh, sisa 2
+              </div>
+              <div id="bead-color-outcome" class="text-xs sm:text-sm font-bold text-slate-700">
+                Karena sisa <strong>2</strong>, manik ke-14 berwarna <span class="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-extrabold">Kuning</span>.
+              </div>
+            </div>
+          </div>
+
+          <!-- SVG Bead Chain & Cycle Visualizer -->
+          <div class="lg:col-span-7 bg-slate-900 rounded-2xl p-5 border border-slate-800 text-white">
+            <div class="text-xs font-bold text-indigo-200 mb-3">
+              Visualisasi Siklus 4 Warna Berulang &amp; Posisi Sisa Pembagian
+            </div>
+            <svg id="svg-bead-cycle" viewBox="0 0 560 240" class="w-full h-auto select-none" role="img" aria-label="Visualisasi pola manik-manik berulang"></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Micro-Check Bagian 2 -->
+      <div class="mt-6 bg-amber-50 border-2 border-amber-300 rounded-2xl p-5">
+        <span class="inline-block text-[11px] font-extrabold uppercase tracking-wider bg-amber-500 text-white px-2.5 py-0.5 rounded-full mb-2">
+          ⚡ Micro-Check Pola Ubin &amp; Manik
+        </span>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-white rounded-xl p-4 border border-amber-200">
+            <p class="text-xs sm:text-sm font-bold text-slate-800 mb-2.5">
+              1. Pada desain kolam tahap <strong>n = 6</strong> (ubin tengah 6×6), berapa banyak <strong>ubin tepi (terakota)</strong> yang mengelilinginya? <span class="font-normal text-slate-500">(Gunakan 4n + 4)</span>
+            </p>
+            <div class="flex items-center gap-2">
+              <input type="number" id="mc-ubin-1" placeholder="?" class="w-24 px-3 py-1.5 rounded-xl border border-slate-300 font-mono text-sm font-extrabold text-center" />
+              <button type="button" id="btn-mc-ubin-1" class="px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition">Cek</button>
+              <span id="fb-mc-ubin-1" class="text-xs font-bold"></span>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl p-4 border border-amber-200">
+            <p class="text-xs sm:text-sm font-bold text-slate-800 mb-2.5">
+              2. Dengan pola 4 warna (1: Merah, 2: Kuning, 3: Hijau, 4: Biru), apa warna manik urutan ke-<strong>2026</strong>?
+            </p>
+            <div class="flex items-center gap-2">
+              <select id="mc-ubin-2" class="px-3 py-1.5 rounded-xl border border-slate-300 text-xs sm:text-sm font-bold text-slate-800 bg-white">
+                <option value="">-- Pilih Warna --</option>
+                <option value="Merah">Merah (sisa 1)</option>
+                <option value="Kuning">Kuning (sisa 2)</option>
+                <option value="Hijau">Hijau (sisa 3)</option>
+                <option value="Biru">Biru (habis dibagi 4)</option>
+              </select>
+              <button type="button" id="btn-mc-ubin-2" class="px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition">Cek</button>
+              <span id="fb-mc-ubin-2" class="text-xs font-bold"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         BAGIAN 3: STUDIO SIMULASI PERTUMBUHAN TABUNGAN & RENCANA KEUANGAN REMAJA
+         ==================================================================== -->
+    <section id="bagian-tabungan" class="scroll-mt-28 bg-white rounded-2xl border border-slate-200 p-5 sm:p-8 shadow-sm">
+      <div class="flex flex-wrap items-start justify-between gap-3 pb-4 mb-6 border-b border-slate-100">
+        <div>
+          <span class="inline-block bg-emerald-100 text-emerald-900 text-xs font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-md mb-1.5">
+            Bagian 3 • Literasi Finansial Remaja (Aritmetika vs Geometri)
+          </span>
+          <h3 class="text-xl sm:text-2xl font-extrabold text-indigo-950">
+            Studio Simulasi Pertumbuhan Tabungan &amp; Rencana Keuangan
+          </h3>
+        </div>
+        <span id="status-tabungan" class="text-xs font-bold px-3.5 py-1.5 rounded-full bg-slate-100 text-slate-600">
+          🎯 Misi: Eksplorasi 10 minggu &amp; jawab refleksi finansial
+        </span>
+      </div>
+
+      <p class="text-xs sm:text-sm text-slate-700 leading-relaxed mb-5">
+        <strong>Misi Tabungan Remaja:</strong> Kamu ingin mengumpulkan dana sebesar <strong>Rp500.000</strong> dalam <strong>10 minggu</strong> untuk membeli tas sekolah &amp; perlengkapan menggambar. Bandingkan dua strategi menabung berikut!
+      </p>
+
+      <!-- Week Slider & Strategy Comparison Cards -->
+      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 mb-6">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+          <label for="slider-save-week" class="text-xs sm:text-sm font-extrabold text-indigo-950">
+            Geser Pekan Menabung (Minggu ke-n):
+          </label>
+          <span id="label-save-week" class="font-mono text-sm font-extrabold bg-indigo-600 text-white px-3.5 py-1 rounded-full">
+            Minggu ke-6
+          </span>
+        </div>
+        <input type="range" id="slider-save-week" min="1" max="10" value="6" class="w-full cursor-pointer" />
+        <div class="flex justify-between text-[11px] font-mono text-slate-500 mt-1">
+          <span>M1</span><span>M2</span><span>M3</span><span>M4</span><span>M5</span><span>M6</span><span>M7</span><span>M8</span><span>M9</span><span>M10</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">
+          <!-- Strategy A: Arithmetic -->
+          <div class="bg-white border-2 border-indigo-200 rounded-2xl p-4 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-extrabold uppercase tracking-wider bg-indigo-100 text-indigo-800 px-2.5 py-0.5 rounded-full">
+                Strategi A • Aritmetika (+Rp5.000)
+              </span>
+              <span id="badge-target-a" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800">
+                Belum Rp500.000
+              </span>
+            </div>
+            <p class="text-xs text-slate-600">
+              Minggu ke-1 menabung <strong>Rp15.000</strong>, lalu setiap minggu selalu <strong>bertambah Rp5.000</strong>.
+            </p>
+            <div class="grid grid-cols-2 gap-2 pt-1">
+              <div class="bg-slate-50 rounded-xl p-2.5 border border-slate-200">
+                <div class="text-[11px] text-slate-500 font-bold">Setoran Minggu ke-<span class="wk-num">6</span> (U<sub>n</sub>)</div>
+                <div id="save-a-un" class="font-mono text-sm sm:text-base font-extrabold text-indigo-700">Rp40.000</div>
+              </div>
+              <div class="bg-indigo-50 rounded-xl p-2.5 border border-indigo-200">
+                <div class="text-[11px] text-indigo-800 font-bold">Total Saldo (S<sub>n</sub>)</div>
+                <div id="save-a-sn" class="font-mono text-sm sm:text-base font-extrabold text-indigo-950">Rp165.000</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Strategy B: Geometric -->
+          <div class="bg-white border-2 border-violet-200 rounded-2xl p-4 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-extrabold uppercase tracking-wider bg-violet-100 text-violet-800 px-2.5 py-0.5 rounded-full">
+                Strategi B • Geometri (×2 Lipat)
+              </span>
+              <span id="badge-target-b" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800">
+                Belum Rp500.000
+              </span>
+            </div>
+            <p class="text-xs text-slate-600">
+              Minggu ke-1 menabung <strong>Rp1.000</strong>, lalu setiap minggu menjadi <strong>2 kali lipat</strong> minggu sebelumnya.
+            </p>
+            <div class="grid grid-cols-2 gap-2 pt-1">
+              <div class="bg-slate-50 rounded-xl p-2.5 border border-slate-200">
+                <div class="text-[11px] text-slate-500 font-bold">Setoran Minggu ke-<span class="wk-num">6</span> (U<sub>n</sub>)</div>
+                <div id="save-b-un" class="font-mono text-sm sm:text-base font-extrabold text-violet-700">Rp32.000</div>
+              </div>
+              <div class="bg-violet-50 rounded-xl p-2.5 border border-violet-200">
+                <div class="text-[11px] text-violet-800 font-bold">Total Saldo (S<sub>n</sub>)</div>
+                <div id="save-b-sn" class="font-mono text-sm sm:text-base font-extrabold text-violet-950">Rp63.000</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SVG Bar Comparison Chart (10 Weeks Cumulative Balance) -->
+      <div class="bg-slate-900 rounded-2xl p-4 sm:p-5 border border-slate-800 text-white mb-6">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <span class="text-xs font-bold text-indigo-200">
+            Grafik Perbandingan Total Saldo Terkumpul (S<sub>n</sub>) Minggu ke-1 s.d. ke-10
+          </span>
+          <div class="flex flex-wrap items-center gap-3 text-[11px]">
+            <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-sm bg-indigo-400 inline-block"></span> Strategi A (Aritmetika)</span>
+            <span class="inline-flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-sm bg-violet-400 inline-block"></span> Strategi B (Geometri)</span>
+            <span class="inline-flex items-center gap-1"><span class="w-3 h-0.5 bg-amber-400 inline-block"></span> Target Rp500.000</span>
+          </div>
+        </div>
+        <div class="w-full overflow-x-auto">
+          <svg id="svg-savings-chart" viewBox="0 0 680 260" class="w-full h-auto min-w-[500px] select-none" role="img" aria-label="Grafik batang perbandingan saldo tabungan 10 minggu"></svg>
+        </div>
+      </div>
+
+      <!-- Financial Literacy Reflection Check -->
+      <div class="bg-emerald-50/80 border-2 border-emerald-300 rounded-2xl p-5">
+        <span class="inline-block text-[11px] font-extrabold uppercase tracking-wider bg-emerald-600 text-white px-2.5 py-0.5 rounded-full mb-2">
+          💡 Refleksi Literasi Finansial
+        </span>
+        <p class="text-xs sm:text-sm font-bold text-slate-800 mb-3">
+          Coba geser slider hingga <strong>Minggu ke-10</strong>! Meskipun Strategi B (×2 lipat) menghasilkan total saldo jauh lebih besar di akhir (Rp1.023.000), mengapa untuk pelajar SMP Strategi A sering lebih realistis dijalankan?
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-3" id="fin-reflection-options">
+          <button type="button" data-fin-opt="wrong1" class="fin-opt-btn text-left p-3 rounded-xl bg-white border border-slate-300 hover:border-indigo-400 text-xs font-semibold text-slate-700 transition">
+            A. Karena pada Strategi A total uangnya selalu lebih besar di setiap minggu.
+          </button>
+          <button type="button" data-fin-opt="correct" class="fin-opt-btn text-left p-3 rounded-xl bg-white border border-slate-300 hover:border-indigo-400 text-xs font-semibold text-slate-700 transition">
+            B. Karena pada Strategi B setoran minggu ke-9 (Rp256.000) dan ke-10 (Rp512.000) melonjak terlalu berat bagi uang saku pelajar.
+          </button>
+        </div>
+        <p id="fb-fin-reflection" class="text-xs font-bold"></p>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         BAGIAN 4: PAKET ASESMEN LITERASI NUMERASI (TIPE AKM / ASAS)
+         ==================================================================== -->
+    <section id="bagian-akm" class="scroll-mt-28 bg-white rounded-2xl border border-slate-200 p-5 sm:p-8 shadow-sm">
+      <div class="flex flex-wrap items-start justify-between gap-3 pb-4 mb-6 border-b border-slate-100">
+        <div>
+          <span class="inline-block bg-rose-100 text-rose-900 text-xs font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-md mb-1.5">
+            Bagian 4 • Paket Asesmen Literasi Numerasi (Tipe AKM / ASAS)
+          </span>
+          <h3 class="text-xl sm:text-2xl font-extrabold text-indigo-950">
+            Uji Kompetensi Literasi Numerasi Pola Bilangan
+          </h3>
+        </div>
+        <span id="status-akm" class="text-xs font-bold px-3.5 py-1.5 rounded-full bg-slate-100 text-slate-600">
+          ✍️ Misi: Kerjakan ke-4 soal AKM di bawah ini
+        </span>
+      </div>
+
+      <div class="space-y-6">
+        <!-- SOAL 1: PILIHAN GANDA (KAPASITAS GEDUNG KESENIAN) -->
+        <article class="bg-slate-50 border border-slate-200 rounded-2xl p-5 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span class="text-xs font-extrabold bg-indigo-600 text-white px-3 py-1 rounded-full">Soal 1 • Pilihan Ganda</span>
+            <span class="text-xs font-semibold text-slate-500">Konteks: Gedung Kesenian Daerah</span>
+          </div>
+          <div class="bg-white border border-slate-200 rounded-xl p-4 text-xs sm:text-sm text-slate-700 leading-relaxed">
+            <strong>Stimulus:</strong> Gedung Kesenian Kota menata kursi penonton melingkar setengah lingkaran yang terdiri atas <strong>10 baris</strong>. Baris pertama memuat <strong>16 kursi</strong>, baris kedua <strong>20 kursi</strong>, baris ketiga <strong>24 kursi</strong>, dan seterusnya bertambah tetap. Untuk alasan keamanan evakuasi, panitia hanya diperbolehkan menjual tiket maksimal <strong>90% dari total kapasitas kursi</strong> gedung.
+          </div>
+          <p class="text-xs sm:text-sm font-extrabold text-indigo-950">
+            Berapa jumlah maksimal tiket yang boleh dijual oleh panitia?
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5" id="akm-q1-options">
+            <label class="flex items-center gap-2.5 p-3 rounded-xl bg-white border border-slate-300 cursor-pointer hover:border-indigo-500 text-xs sm:text-sm font-semibold">
+              <input type="radio" name="akm-q1" value="A" class="accent-indigo-600" />
+              <span>A. 306 tiket</span>
+            </label>
+            <label class="flex items-center gap-2.5 p-3 rounded-xl bg-white border border-slate-300 cursor-pointer hover:border-indigo-500 text-xs sm:text-sm font-semibold">
+              <input type="radio" name="akm-q1" value="B" class="accent-indigo-600" />
+              <span>B. 340 tiket</span>
+            </label>
+            <label class="flex items-center gap-2.5 p-3 rounded-xl bg-white border border-slate-300 cursor-pointer hover:border-indigo-500 text-xs sm:text-sm font-semibold">
+              <input type="radio" name="akm-q1" value="C" class="accent-indigo-600" />
+              <span>C. 468 tiket</span>
+            </label>
+            <label class="flex items-center gap-2.5 p-3 rounded-xl bg-white border border-slate-300 cursor-pointer hover:border-indigo-500 text-xs sm:text-sm font-semibold">
+              <input type="radio" name="akm-q1" value="D" class="accent-indigo-600" />
+              <span>D. 520 tiket</span>
+            </label>
+          </div>
+          <div class="flex items-center gap-3">
+            <button type="button" id="btn-check-akm1" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm transition">
+              Periksa Jawaban
+            </button>
+          </div>
+          <div id="fb-akm1" class="hidden text-xs p-3.5 rounded-xl leading-relaxed"></div>
+        </article>
+
+        <!-- SOAL 2: BENAR / SALAH MULTI-PERNYATAAN (KATEGORI AKM) -->
+        <article class="bg-slate-50 border border-slate-200 rounded-2xl p-5 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span class="text-xs font-extrabold bg-violet-600 text-white px-3 py-1 rounded-full">Soal 2 • Benar / Salah Multi-Pernyataan (AKM)</span>
+            <span class="text-xs font-semibold text-slate-500">Konteks: Pemasangan Ubin Lantai</span>
+          </div>
+          <div class="bg-white border border-slate-200 rounded-xl p-4 text-xs sm:text-sm text-slate-700 leading-relaxed">
+            <strong>Stimulus:</strong> Pak Budi memasang ubin motif persegi untuk teras rumah mengikuti aturan desain kolam seperti pada Bagian 2: pada tahap ke-<em>n</em>, bagian tengah memakai <strong>n × n</strong> ubin putih dan dikelilingi <strong>4n + 4</strong> ubin motif di bagian tepi. Harga 1 ubin motif adalah <strong>Rp12.000</strong>.
+          </div>
+          <p class="text-xs sm:text-sm font-extrabold text-indigo-950">
+            Tentukan status <strong>Benar</strong> atau <strong>Salah</strong> untuk setiap pernyataan berikut!
+          </p>
+
+          <div class="overflow-x-auto rounded-xl border border-slate-200 bg-white">
+            <table class="w-full text-left border-collapse text-xs sm:text-sm">
+              <thead>
+                <tr class="bg-indigo-950 text-white">
+                  <th class="py-2.5 px-3.5">Pernyataan</th>
+                  <th class="py-2.5 px-3 text-center w-24">Benar</th>
+                  <th class="py-2.5 px-3 text-center w-24">Salah</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200">
+                <tr>
+                  <td class="py-3 px-3.5 font-medium text-slate-800">
+                    1) Pada desain tahap ke-4 (n = 4), jumlah ubin motif di tepi adalah <strong>20 ubin</strong>.
+                  </td>
+                  <td class="py-3 px-3 text-center">
+                    <input type="radio" name="akm2-s1" value="B" class="w-4 h-4 accent-emerald-600 cursor-pointer" />
+                  </td>
+                  <td class="py-3 px-3 text-center">
+                    <input type="radio" name="akm2-s1" value="S" class="w-4 h-4 accent-rose-600 cursor-pointer" />
+                  </td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-3.5 font-medium text-slate-800">
+                    2) Biaya khusus untuk membeli ubin motif pada tahap ke-4 adalah <strong>Rp240.000</strong>.
+                  </td>
+                  <td class="py-3 px-3 text-center">
+                    <input type="radio" name="akm2-s2" value="B" class="w-4 h-4 accent-emerald-600 cursor-pointer" />
+                  </td>
+                  <td class="py-3 px-3 text-center">
+                    <input type="radio" name="akm2-s2" value="S" class="w-4 h-4 accent-rose-600 cursor-pointer" />
+                  </td>
+                </tr>
+                <tr>
+                  <td class="py-3 px-3.5 font-medium text-slate-800">
+                    3) Pada tahap ke-5 (n = 5), jumlah ubin putih di tengah <strong>lebih sedikit</strong> daripada jumlah ubin motif di tepi.
+                  </td>
+                  <td class="py-3 px-3 text-center">
+                    <input type="radio" name="akm2-s3" value="B" class="w-4 h-4 accent-emerald-600 cursor-pointer" />
+                  </td>
+                  <td class="py-3 px-3 text-center">
+                    <input type="radio" name="akm2-s3" value="S" class="w-4 h-4 accent-rose-600 cursor-pointer" />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <button type="button" id="btn-check-akm2" class="px-4 py-2 rounded-xl bg-violet-600 hover:bg-violet-700 text-white font-bold text-xs sm:text-sm transition">
+            Periksa Jawaban
+          </button>
+          <div id="fb-akm2" class="hidden text-xs p-3.5 rounded-xl leading-relaxed"></div>
+        </article>
+
+        <!-- SOAL 3: ISIAN SINGKAT NUMERIK (JADWAL LATIHAN LARI) -->
+        <article class="bg-slate-50 border border-slate-200 rounded-2xl p-5 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span class="text-xs font-extrabold bg-emerald-600 text-white px-3 py-1 rounded-full">Soal 3 • Isian Singkat Numerik</span>
+            <span class="text-xs font-semibold text-slate-500">Konteks: Program Latihan Atletik</span>
+          </div>
+          <div class="bg-white border border-slate-200 rounded-xl p-4 text-xs sm:text-sm text-slate-700 leading-relaxed">
+            <strong>Stimulus:</strong> Raka berlatih lari untuk persiapan lomba tingkat kabupaten selama <strong>7 hari berturut-turut</strong>. Pada hari ke-1 ia berlari sejauh <strong>1.200 meter</strong>, hari ke-2 sejauh <strong>1.500 meter</strong>, hari ke-3 sejauh <strong>1.800 meter</strong>, dan setiap hari jarak larinya selalu bertambah <strong>300 meter</strong>.
+          </div>
+          <p class="text-xs sm:text-sm font-extrabold text-indigo-950">
+            Berapa meter jarak lari Raka khusus pada <strong>hari ke-7</strong>?
+          </p>
+          <div class="flex flex-wrap items-center gap-3">
+            <input type="number" id="akm-q3-input" placeholder="Masukkan angka" class="w-40 px-3.5 py-2 rounded-xl border-2 border-slate-300 bg-white font-mono text-sm font-extrabold text-center focus:outline-none focus:border-indigo-600" />
+            <span class="text-xs font-bold text-slate-600">meter</span>
+            <button type="button" id="btn-check-akm3" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm transition">
+              Periksa Jawaban
+            </button>
+          </div>
+          <div id="fb-akm3" class="hidden text-xs p-3.5 rounded-xl leading-relaxed"></div>
+        </article>
+
+        <!-- SOAL 4: PILIHAN GANDA KOMPLEKS (ANALISIS KESALAHAN U_n vs S_n) -->
+        <article class="bg-slate-50 border border-slate-200 rounded-2xl p-5 space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span class="text-xs font-extrabold bg-amber-500 text-white px-3 py-1 rounded-full">Soal 4 • Pilihan Ganda Kompleks (Pilih Lebih dari Satu)</span>
+            <span class="text-xs font-semibold text-slate-500">Konteks: Analisis Kesalahan U<sub>n</sub> vs S<sub>n</sub></span>
+          </div>
+          <div class="bg-white border border-slate-200 rounded-xl p-4 text-xs sm:text-sm text-slate-700 leading-relaxed">
+            <strong>Stimulus:</strong> Seorang panitia bazar menyusun tumpukan gelas kertas. Baris paling atas (baris ke-1) ada <strong>4 gelas</strong>, baris ke-2 ada <strong>6 gelas</strong>, baris ke-3 ada <strong>8 gelas</strong>, dan seterusnya hingga <strong>6 baris</strong>. Dimas menghitung: <em>"U<sub>6</sub> = 4 + (6 − 1) × 2 = 14, jadi total seluruh gelas dalam tumpukan tersebut adalah 14 gelas."</em>
+          </div>
+          <p class="text-xs sm:text-sm font-extrabold text-indigo-950">
+            Pilihlah <strong>DUA pernyataan yang benar</strong> terkait perhitungan Dimas di atas!
+          </p>
+          <div class="space-y-2.5" id="akm-q4-options">
+            <label class="flex items-start gap-2.5 p-3 rounded-xl bg-white border border-slate-300 cursor-pointer hover:border-indigo-500 text-xs sm:text-sm font-semibold">
+              <input type="checkbox" name="akm-q4" value="A" class="mt-0.5 w-4 h-4 accent-indigo-600" />
+              <span>A. Nilai U<sub>6</sub> = 14 sudah benar, tetapi itu hanya menyatakan banyak gelas pada <strong>baris ke-6 saja</strong>.</span>
+            </label>
+            <label class="flex items-start gap-2.5 p-3 rounded-xl bg-white border border-slate-300 cursor-pointer hover:border-indigo-500 text-xs sm:text-sm font-semibold">
+              <input type="checkbox" name="akm-q4" value="B" class="mt-0.5 w-4 h-4 accent-indigo-600" />
+              <span>B. Kesimpulan Dimas sudah tepat karena U<sub>6</sub> selalu sama dengan total seluruh gelas.</span>
+            </label>
+            <label class="flex items-start gap-2.5 p-3 rounded-xl bg-white border border-slate-300 cursor-pointer hover:border-indigo-500 text-xs sm:text-sm font-semibold">
+              <input type="checkbox" name="akm-q4" value="C" class="mt-0.5 w-4 h-4 accent-indigo-600" />
+              <span>C. Total seluruh gelas seharusnya dihitung menggunakan <strong>S<sub>6</sub> = 4 + 6 + 8 + 10 + 12 + 14 = 54 gelas</strong>.</span>
+            </label>
+            <label class="flex items-start gap-2.5 p-3 rounded-xl bg-white border border-slate-300 cursor-pointer hover:border-indigo-500 text-xs sm:text-sm font-semibold">
+              <input type="checkbox" name="akm-q4" value="D" class="mt-0.5 w-4 h-4 accent-indigo-600" />
+              <span>D. Total seluruh gelas dalam tumpukan tersebut adalah 84 gelas.</span>
+            </label>
+          </div>
+          <button type="button" id="btn-check-akm4" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs sm:text-sm transition">
+            Periksa Jawaban
+          </button>
+          <div id="fb-akm4" class="hidden text-xs p-3.5 rounded-xl leading-relaxed"></div>
+        </article>
+      </div>
+
+      <!-- Final Score & Certificate Trigger -->
+      <div class="mt-7 pt-6 border-t border-slate-200 flex flex-wrap items-center justify-between gap-4">
+        <div class="text-xs sm:text-sm font-bold text-slate-700">
+          Status Paket AKM: <span id="akm-summary-count" class="font-mono font-extrabold text-indigo-700">0 / 4</span> soal diperiksa
+        </div>
+        <button type="button" id="btn-show-certificate" class="px-5 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white font-extrabold text-xs sm:text-sm shadow-lg shadow-indigo-600/20 transition">
+          🏆 Tampilkan Skor Akhir &amp; Sertifikat Penyelesaian Seri NŪMA
+        </button>
+      </div>
+
+      <!-- Certificate / Final Score Modal-Style Card (Inline Reveal) -->
+      <div id="certificate-card" class="hidden mt-6 rounded-3xl bg-gradient-to-br from-indigo-950 via-indigo-900 to-violet-800 text-white p-6 sm:p-8 border-2 border-amber-400 shadow-xl animate-pop">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/15 pb-4 mb-5">
+          <div>
+            <span class="text-[11px] font-extrabold uppercase tracking-widest text-amber-300">
+              SERTIFIKAT PENYELESAIAN MANDIRI • NŪMA — ALGEBRA
+            </span>
+            <h4 class="text-xl sm:text-2xl font-extrabold mt-1">
+              Apresiasi Pembelajaran Pola Bilangan Kelas 8 SMP
+            </h4>
+          </div>
+          <div class="bg-amber-400 text-indigo-950 font-mono font-extrabold text-sm sm:text-base px-4 py-2 rounded-2xl shadow">
+            Skor AKM: <span id="cert-score">0</span> / 100
+          </div>
+        </div>
+
+        <div class="space-y-3 text-xs sm:text-sm text-indigo-100 leading-relaxed mb-5">
+          <div class="flex flex-wrap items-center gap-2">
+            <label for="cert-student-name" class="font-bold text-white">Nama Siswa:</label>
+            <input type="text" id="cert-student-name" placeholder="Ketik nama lengkapmu di sini..." class="px-3.5 py-1.5 rounded-xl bg-white/15 border border-white/30 text-white placeholder-indigo-200 font-bold text-xs sm:text-sm focus:outline-none focus:border-amber-300" />
+          </div>
+          <p id="cert-message">
+            Telah menyelesaikan eksplorasi interaktif mandiri <strong>Modul 5: Penerapan &amp; Literasi Numerasi Pola Bilangan</strong> pada platform <strong>NŪMA (Number Numen) — Algebra</strong> yang dirancang oleh <strong>Lusia Adven Ningrum</strong>.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-3 text-xs text-indigo-200 pt-3 border-t border-white/15">
+          <span>Progres Modul 5: <strong id="cert-progress" class="text-emerald-300 font-mono">100%</strong></span>
+          <span>Guru Pengampu: <strong class="text-white">Lusia Adven Ningrum</strong></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         6. NAVIGASI PENUTUP SERI MODUL NŪMA — ALGEBRA (MODUL 1 - 5)
+         ==================================================================== -->
+    <section class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm space-y-5" aria-label="Ringkasan dan Navigasi Lengkap Seri Modul NŪMA">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <span class="text-[11px] font-extrabold uppercase tracking-wider text-indigo-600">
+            Peta Lengkap Pembelajaran Mandiri
+          </span>
+          <h3 class="text-lg sm:text-xl font-extrabold text-indigo-950">
+            Ringkasan Seri NŪMA (Number Numen) — Algebra Kelas 8
+          </h3>
+        </div>
+        <span class="text-xs font-extrabold bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full">
+          5 dari 5 Modul Lengkap
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+        <a href="index.html" class="p-3.5 rounded-2xl border border-slate-200 hover:border-indigo-500 bg-slate-50 hover:bg-indigo-50/60 transition block">
+          <div class="text-[11px] font-extrabold text-indigo-600">MODUL 1</div>
+          <div class="text-xs sm:text-sm font-extrabold text-indigo-950 mt-0.5">Konsep Dasar &amp; Konfigurasi Objek</div>
+          <div class="text-[11px] text-slate-500 mt-1">Noktah &amp; korek api →</div>
+        </a>
+
+        <a href="modul-2.html" class="p-3.5 rounded-2xl border border-slate-200 hover:border-indigo-500 bg-slate-50 hover:bg-indigo-50/60 transition block">
+          <div class="text-[11px] font-extrabold text-indigo-600">MODUL 2</div>
+          <div class="text-xs sm:text-sm font-extrabold text-indigo-950 mt-0.5">Barisan Aritmetika (+b / −b)</div>
+          <div class="text-[11px] text-slate-500 mt-1">Selisih tetap &amp; U<sub>n</sub> →</div>
+        </a>
+
+        <a href="modul-3.html" class="p-3.5 rounded-2xl border border-slate-200 hover:border-indigo-500 bg-slate-50 hover:bg-indigo-50/60 transition block">
+          <div class="text-[11px] font-extrabold text-indigo-600">MODUL 3</div>
+          <div class="text-xs sm:text-sm font-extrabold text-indigo-950 mt-0.5">Barisan Geometri (×r)</div>
+          <div class="text-[11px] text-slate-500 mt-1">Pembelahan &amp; rasio →</div>
+        </a>
+
+        <a href="modul-4.html" class="p-3.5 rounded-2xl border border-slate-200 hover:border-indigo-500 bg-slate-50 hover:bg-indigo-50/60 transition block">
+          <div class="text-[11px] font-extrabold text-indigo-600">MODUL 4</div>
+          <div class="text-xs sm:text-sm font-extrabold text-indigo-950 mt-0.5">Pola Bilangan Khusus</div>
+          <div class="text-[11px] text-slate-500 mt-1">Fibonacci, Pascal, Bertingkat →</div>
+        </a>
+
+        <div class="p-3.5 rounded-2xl border-2 border-indigo-600 bg-indigo-50 block">
+          <div class="text-[11px] font-extrabold text-indigo-700">MODUL 5 (AKTIF)</div>
+          <div class="text-xs sm:text-sm font-extrabold text-indigo-950 mt-0.5">Penerapan &amp; Literasi Numerasi</div>
+          <div class="text-[11px] text-emerald-700 font-bold mt-1">✓ Modul Penutup</div>
+        </div>
+      </div>
+
+      <div class="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+        <a href="modul-4.html" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 font-bold text-xs sm:text-sm transition">
+          ← Kembali ke Modul 4: Pola Bilangan Khusus
+        </a>
+        <a href="index.html" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm shadow-sm transition">
+          🏠 Kembali ke Halaman Induk Modul 1
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="max-w-6xl mx-auto px-4 pt-8 text-center text-xs text-slate-500">
+    <strong>NŪMA (Number Numen) — Algebra</strong> • Dikembangkan oleh <strong>Lusia Adven Ningrum</strong> • Media Pembelajaran Mandiri Matematika SMP Kelas 8.
+  </footer>
+
+  <!-- ======================================================================
+       VANILLA JAVASCRIPT: FULL INTERACTIVE ENGINE
+       ====================================================================== -->
+  <script>
+    (function () {
+      "use strict";
+
+      /* --------------------------------------------------------------------
+         1. GLOBAL PROGRESS TRACKER (0% - 100%)
+         -------------------------------------------------------------------- */
+      const progressState = {
+        kursi: false,
+        ubin: false,
+        tabungan: false,
+        akm: false
+      };
+
+      function updateProgressUI() {
+        const completed = Object.values(progressState).filter(Boolean).length;
+        const pct = Math.round((completed / 4) * 100);
+
+        document.getElementById("progress-bar").style.width = pct + "%";
+        document.getElementById("progress-text").textContent = pct + "%";
+
+        const map = [
+          { key: "kursi", statusId: "status-kursi", navId: "nav-kursi" },
+          { key: "ubin", statusId: "status-ubin", navId: "nav-ubin" },
+          { key: "tabungan", statusId: "status-tabungan", navId: "nav-tabungan" },
+          { key: "akm", statusId: "status-akm", navId: "nav-akm" }
+        ];
+
+        map.forEach((item) => {
+          if (progressState[item.key]) {
+            const st = document.getElementById(item.statusId);
+            st.textContent = "✅ Bagian Selesai";
+            st.className = "text-xs font-bold px-3.5 py-1.5 rounded-full bg-emerald-100 text-emerald-800";
+
+            const nav = document.getElementById(item.navId);
+            nav.querySelector(".check-icon").classList.remove("hidden");
+            nav.classList.add("bg-emerald-50", "text-emerald-800");
+          }
+        });
+      }
+
+      /* --------------------------------------------------------------------
+         2. BAGIAN 1: SIMULATOR SUSUNAN KURSI GEDUNG PERTUNJUKAN / BIOSKOP
+         -------------------------------------------------------------------- */
+      const seatState = {
+        n: 8,
+        a: 10,
+        b: 3,
+        highlightLast: true,
+        step1Done: false,
+        step2Done: false,
+        step3Done: false
+      };
+
+      function renderAuditorium() {
+        const { n, a, b, highlightLast } = seatState;
+        document.getElementById("label-seat-rows").textContent = `${n} Baris`;
+
+        const rowsData = [];
+        let sumTotal = 0;
+        for (let i = 1; i <= n; i++) {
+          const count = a + (i - 1) * b;
+          rowsData.push(count);
+          sumTotal += count;
+        }
+        const lastRowCount = rowsData[rowsData.length - 1];
+
+        // Update Real-time Statistics
+        document.getElementById("stat-seat-un").textContent = `${lastRowCount} kursi`;
+        document.getElementById("stat-seat-un-desc").innerHTML = `Hanya menghitung kursi di <strong>Baris ke-${n}</strong> saja.`;
+        document.getElementById("stat-seat-sn").textContent = `${sumTotal} kursi`;
+        document.getElementById("stat-seat-sn-desc").innerHTML = `Akumulasi seluruh kursi dari <strong>Baris ke-1 s.d. ke-${n}</strong>.`;
+        document.getElementById("stat-seat-breakdown").textContent = `${rowsData.join(" + ")} = ${sumTotal}`;
+
+        // Render SVG Auditorium
+        const svg = document.getElementById("svg-auditorium");
+        const W = 640;
+        const H = 340;
+        let markup = "";
+
+        // Stage arc at top
+        markup += `
+          <path d="M 150 18 Q 320 52 490 18 L 472 42 Q 320 70 168 42 Z" fill="#4f46e5" opacity="0.9" />
+          <text x="320" y="38" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="800" letter-spacing="2">PANGGUNG PERTUNJUKAN</text>
+        `;
+
+        const startY = 66;
+        const availH = H - startY - 16;
+        const rowPitch = Math.min(23, availH / Math.max(n, 1));
+        const maxSeatsInAnyRow = rowsData[rowsData.length - 1];
+        const maxDrawWidth = 510;
+        const seatStep = Math.min(14, maxDrawWidth / Math.max(maxSeatsInAnyRow, 1));
+        const seatW = Math.max(4, seatStep - 3);
+        const seatH = Math.min(13, Math.max(6, rowPitch - 6));
+
+        rowsData.forEach((cnt, idx) => {
+          const rowNum = idx + 1;
+          const isLast = rowNum === n && highlightLast;
+          const y = startY + idx * rowPitch;
+          const totalRowW = cnt * seatStep - 3;
+          const startX = (W - totalRowW) / 2;
+
+          // Row highlight band if active
+          if (isLast) {
+            markup += `<rect x="${startX - 8}" y="${y - 3}" width="${totalRowW + 16}" height="${seatH + 6}" rx="6" fill="#f59e0b" opacity="0.18" stroke="#f59e0b" stroke-width="1" />`;
+          }
+
+          // Row label on left
+          markup += `<text x="${Math.max(12, startX - 14)}" y="${y + seatH - 1}" text-anchor="end" fill="${isLast ? "#fbbf24" : "#94a3b8"}" font-size="10" font-family="JetBrains Mono, monospace" font-weight="700">B${rowNum}</text>`;
+
+          // Individual seats
+          for (let s = 0; s < cnt; s++) {
+            const sx = startX + s * seatStep;
+            const fill = isLast ? "#f59e0b" : "#6366f1";
+            markup += `<rect x="${sx.toFixed(1)}" y="${y.toFixed(1)}" width="${seatW.toFixed(1)}" height="${seatH.toFixed(1)}" rx="2.5" fill="${fill}" />`;
+          }
+
+          // Seat count badge on right
+          markup += `<text x="${Math.min(W - 10, startX + totalRowW + 12)}" y="${y + seatH - 1}" text-anchor="start" fill="${isLast ? "#fcd34d" : "#cbd5e1"}" font-size="10" font-family="JetBrains Mono, monospace" font-weight="800">${cnt}</text>`;
+        });
+
+        svg.innerHTML = markup;
+      }
+
+      function checkSeatStoryCompletion() {
+        if (seatState.step1Done && seatState.step2Done && seatState.step3Done) {
+          progressState.kursi = true;
+          updateProgressUI();
+        }
+      }
+
+      document.getElementById("slider-seat-rows").addEventListener("input", (e) => {
+        seatState.n = Number(e.target.value);
+        renderAuditorium();
+      });
+
+      document.getElementById("input-seat-a").addEventListener("input", (e) => {
+        const val = Math.min(25, Math.max(1, Number(e.target.value) || 1));
+        seatState.a = val;
+        renderAuditorium();
+      });
+
+      document.getElementById("input-seat-b").addEventListener("input", (e) => {
+        const val = Math.min(10, Math.max(0, Number(e.target.value) || 0));
+        seatState.b = val;
+        renderAuditorium();
+      });
+
+      document.querySelectorAll(".seat-preset-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".seat-preset-btn").forEach((b) => {
+            b.className = "seat-preset-btn text-xs font-bold px-3 py-1.5 rounded-xl bg-white text-slate-700 border border-slate-300 hover:border-indigo-400 transition";
+          });
+          btn.className = "seat-preset-btn text-xs font-bold px-3 py-1.5 rounded-xl bg-indigo-600 text-white shadow-sm transition";
+
+          const [a, b, n] = btn.dataset.seatPreset.split(",").map(Number);
+          seatState.a = a;
+          seatState.b = b;
+          seatState.n = n;
+          document.getElementById("input-seat-a").value = a;
+          document.getElementById("input-seat-b").value = b;
+          document.getElementById("slider-seat-rows").value = n;
+          renderAuditorium();
+        });
+      });
+
+      document.getElementById("btn-load-story-preset").addEventListener("click", () => {
+        seatState.a = 10;
+        seatState.b = 3;
+        seatState.n = 8;
+        document.getElementById("input-seat-a").value = 10;
+        document.getElementById("input-seat-b").value = 3;
+        document.getElementById("slider-seat-rows").value = 8;
+        renderAuditorium();
+      });
+
+      document.getElementById("btn-highlight-last-row").addEventListener("click", (e) => {
+        seatState.highlightLast = !seatState.highlightLast;
+        const btn = e.currentTarget;
+        const txt = document.getElementById("text-highlight-last-row");
+        btn.setAttribute("aria-pressed", String(seatState.highlightLast));
+        if (seatState.highlightLast) {
+          btn.className = "w-full py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-extrabold text-xs sm:text-sm shadow-sm transition flex items-center justify-center gap-2";
+          txt.textContent = "Sorotan Baris Terakhir: AKTIF";
+        } else {
+          btn.className = "w-full py-2.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs sm:text-sm transition flex items-center justify-center gap-2";
+          txt.textContent = "Sorotan Baris Terakhir: NONAKTIF";
+        }
+        renderAuditorium();
+      });
+
+      // Step 1 Check: b = 3, U_8 = 31
+      document.getElementById("btn-check-step1").addEventListener("click", () => {
+        const bVal = Number(document.getElementById("step1-b").value);
+        const u8Val = Number(document.getElementById("step1-u8").value);
+        const fb = document.getElementById("fb-step1");
+
+        if (bVal === 3 && u8Val === 31) {
+          fb.className = "text-xs font-bold text-emerald-700";
+          fb.innerHTML = "✅ Benar! b = 3 dan U<sub>8</sub> = 10 + 7(3) = <strong>31 kursi</strong>.";
+          seatState.step1Done = true;
+          checkSeatStoryCompletion();
+        } else {
+          fb.className = "text-xs font-bold text-rose-600";
+          fb.innerHTML = "❌ Belum tepat. Selisihnya 13 − 10 = 3, dan U<sub>8</sub> = 10 + 7×3.";
+        }
+      });
+
+      // Step 2 Check: S_8 = 164
+      document.getElementById("btn-check-step2").addEventListener("click", () => {
+        const s8Val = Number(document.getElementById("step2-s8").value);
+        const fb = document.getElementById("fb-step2");
+
+        if (s8Val === 164) {
+          fb.className = "text-xs font-bold text-emerald-700";
+          fb.innerHTML = "✅ Tepat! 4 pasang × 41 = <strong>164 kursi</strong> total.";
+          seatState.step2Done = true;
+          checkSeatStoryCompletion();
+        } else {
+          fb.className = "text-xs font-bold text-rose-600";
+          fb.innerHTML = "❌ Belum tepat. Hitung 10 + 13 + 16 + 19 + 22 + 25 + 28 + 31.";
+        }
+      });
+
+      // Step 3 Check: VIP (baris 1-3: 10+13+16 = 39 * 50.000 = 1.950.000) + Reguler (164 - 39 = 125 * 30.000 = 3.750.000) = 5.700.000
+      document.getElementById("btn-check-step3").addEventListener("click", () => {
+        const revVal = Number(document.getElementById("step3-rev").value);
+        const fb = document.getElementById("fb-step3");
+
+        if (revVal === 5700000) {
+          fb.className = "text-xs font-bold text-emerald-700";
+          fb.innerHTML = "🎉 Luar biasa! VIP: 39 × Rp50.000 = Rp1.950.000; Reguler: 125 × Rp30.000 = Rp3.750.000. Total = <strong>Rp5.700.000</strong>.";
+          seatState.step3Done = true;
+          checkSeatStoryCompletion();
+        } else {
+          fb.className = "text-xs font-bold text-rose-600";
+          fb.innerHTML = "❌ Cek kembali: Baris 1–3 ada 10+13+16 = 39 kursi (×50.000), sisa 125 kursi reguler (×30.000).";
+        }
+      });
+
+      /* --------------------------------------------------------------------
+         3. BAGIAN 2: SIMULATOR POLA UBIN TAMAN & MANIK-MANIK
+         -------------------------------------------------------------------- */
+      const ubinState = {
+        visitedTile: true,
+        visitedBead: false,
+        mc1Done: false,
+        mc2Done: false
+      };
+
+      function checkUbinCompletion() {
+        if (ubinState.visitedTile && ubinState.visitedBead && ubinState.mc1Done && ubinState.mc2Done) {
+          progressState.ubin = true;
+          updateProgressUI();
+        }
+      }
+
+      // Tab Switching
+      document.getElementById("tab-btn-tile").addEventListener("click", () => {
+        ubinState.visitedTile = true;
+        document.getElementById("panel-tile").classList.remove("hidden");
+        document.getElementById("panel-bead").classList.add("hidden");
+        document.getElementById("tab-btn-tile").className = "px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold bg-indigo-600 text-white shadow-sm transition";
+        document.getElementById("tab-btn-bead").className = "px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 transition";
+        checkUbinCompletion();
+      });
+
+      document.getElementById("tab-btn-bead").addEventListener("click", () => {
+        ubinState.visitedBead = true;
+        document.getElementById("panel-bead").classList.remove("hidden");
+        document.getElementById("panel-tile").classList.add("hidden");
+        document.getElementById("tab-btn-bead").className = "px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold bg-violet-600 text-white shadow-sm transition";
+        document.getElementById("tab-btn-tile").className = "px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 transition";
+        renderBeadPattern(Number(document.getElementById("input-bead-n").value) || 14);
+        checkUbinCompletion();
+      });
+
+      // Tab A: Tile Grid Renderer
+      function renderTileGrid(n) {
+        const blueCount = n * n;
+        const borderCount = 4 * n + 4;
+        const totalCount = (n + 2) * (n + 2);
+        const dim = n + 2;
+
+        document.getElementById("label-tile-n").textContent = `Tahap n = ${n}`;
+        document.getElementById("tile-blue-formula").textContent = `Ukuran ${n} × ${n} = n²`;
+        document.getElementById("tile-blue-count").textContent = blueCount;
+        document.getElementById("tile-border-formula").textContent = `4n + 4 = 4(${n}) + 4`;
+        document.getElementById("tile-border-count").textContent = borderCount;
+        document.getElementById("tile-total-formula").textContent = `(n + 2)² = ${dim} × ${dim}`;
+        document.getElementById("tile-total-count").textContent = totalCount;
+        document.getElementById("tile-grid-dim").textContent = `${dim} × ${dim} ubin`;
+
+        const svg = document.getElementById("svg-tile-grid");
+        const size = 320;
+        const pad = 14;
+        const cellPitch = (size - pad * 2) / dim;
+        const cellSize = cellPitch - 3;
+
+        let markup = "";
+        for (let r = 0; r < dim; r++) {
+          for (let c = 0; c < dim; c++) {
+            const isBorder = r === 0 || r === dim - 1 || c === 0 || c === dim - 1;
+            const x = pad + c * cellPitch;
+            const y = pad + r * cellPitch;
+            const fill = isBorder ? "#f59e0b" : "#3b82f6";
+            const stroke = isBorder ? "#b45309" : "#1d4ed8";
+            markup += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${cellSize.toFixed(1)}" height="${cellSize.toFixed(1)}" rx="4" fill="${fill}" stroke="${stroke}" stroke-width="1" />`;
+          }
+        }
+        svg.innerHTML = markup;
+      }
+
+      document.getElementById("slider-tile-n").addEventListener("input", (e) => {
+        renderTileGrid(Number(e.target.value));
+      });
+
+      // Tab B: Bead Cycle Renderer
+      const beadColors = [
+        { name: "Merah", hex: "#e11d48", badgeClass: "bg-rose-100 text-rose-800" },     // rem 1
+        { name: "Kuning", hex: "#f59e0b", badgeClass: "bg-amber-100 text-amber-800" },  // rem 2
+        { name: "Hijau", hex: "#10b981", badgeClass: "bg-emerald-100 text-emerald-800" }, // rem 3
+        { name: "Biru", hex: "#4f46e5", badgeClass: "bg-indigo-100 text-indigo-800" }    // rem 0 (4th)
+      ];
+
+      function renderBeadPattern(nRaw) {
+        const n = Math.max(1, Math.min(99999, Math.floor(nRaw)));
+        const rem = n % 4;
+        const quotient = Math.floor(n / 4);
+        const colorIdx = rem === 0 ? 3 : rem - 1;
+        const chosen = beadColors[colorIdx];
+
+        const remText = rem === 0
+          ? `${n} ÷ 4 = ${quotient} kelompok penuh, sisa 0 (urutan ke-4 siklus)`
+          : `${n} ÷ 4 = ${quotient} kelompok penuh, sisa ${rem}`;
+
+        document.getElementById("bead-modulo-calc").textContent = remText;
+        document.getElementById("bead-color-outcome").innerHTML =
+          `Manik urutan ke-<strong>${n}</strong> berada di posisi ke-<strong>${colorIdx + 1}</strong> dalam siklus, sehingga berwarna <span class="px-2.5 py-0.5 rounded-full ${chosen.badgeClass} font-extrabold">${chosen.name}</span>.`;
+
+        const svg = document.getElementById("svg-bead-cycle");
+        let markup = "";
+
+        // Draw 4-bead repeating template on top
+        markup += `<text x="280" y="24" text-anchor="middle" fill="#cbd5e1" font-size="11" font-weight="700">1 Siklus Pola = 4 Manik Berulang</text>`;
+
+        beadColors.forEach((b, idx) => {
+          const cx = 130 + idx * 100;
+          const cy = 62;
+          const isMatch = idx === colorIdx;
+          if (isMatch) {
+            markup += `<circle cx="${cx}" cy="${cy}" r="28" fill="none" stroke="#fbbf24" stroke-width="3" stroke-dasharray="4 3" />`;
+          }
+          markup += `<circle cx="${cx}" cy="${cy}" r="20" fill="${b.hex}" stroke="#ffffff" stroke-width="2" />`;
+          markup += `<text x="${cx}" y="${cy + 4}" text-anchor="middle" fill="#ffffff" font-size="11" font-family="JetBrains Mono, monospace" font-weight="800">${idx === 3 ? "Sisa 0" : "Sisa " + (idx + 1)}</text>`;
+          markup += `<text x="${cx}" y="${cy + 38}" text-anchor="middle" fill="${isMatch ? "#fcd34d" : "#94a3b8"}" font-size="11" font-weight="700">${b.name}</text>`;
+        });
+
+        // Draw sample chain of 12 beads below showing grouping by 4
+        markup += `<line x1="30" y1="126" x2="530" y2="126" stroke="#334155" stroke-width="1.5" />`;
+        markup += `<text x="280" y="148" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="700">Contoh Rangkaian 12 Manik Pertama (Dikelompokkan per 4)</text>`;
+
+        for (let i = 1; i <= 12; i++) {
+          const cIdx = (i - 1) % 4;
+          const b = beadColors[cIdx];
+          const groupOffset = Math.floor((i - 1) / 4) * 14;
+          const cx = 46 + (i - 1) * 38 + groupOffset;
+          const cy = 186;
+          const isMatch = cIdx === colorIdx;
+
+          if (isMatch) {
+            markup += `<circle cx="${cx}" cy="${cy}" r="18" fill="none" stroke="#fbbf24" stroke-width="2" />`;
+          }
+          markup += `<circle cx="${cx}" cy="${cy}" r="13" fill="${b.hex}" />`;
+          markup += `<text x="${cx}" y="${cy + 4}" text-anchor="middle" fill="#ffffff" font-size="10" font-family="JetBrains Mono, monospace" font-weight="800">${i}</text>`;
+        }
+
+        svg.innerHTML = markup;
+      }
+
+      document.getElementById("slider-bead-n").addEventListener("input", (e) => {
+        const val = Number(e.target.value);
+        document.getElementById("input-bead-n").value = val;
+        renderBeadPattern(val);
+      });
+
+      document.getElementById("input-bead-n").addEventListener("input", (e) => {
+        const val = Number(e.target.value) || 1;
+        if (val <= 40) {
+          document.getElementById("slider-bead-n").value = val;
+        }
+        renderBeadPattern(val);
+      });
+
+      document.querySelectorAll(".bead-quick-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const val = Number(btn.dataset.beadQuick);
+          document.getElementById("input-bead-n").value = val;
+          if (val <= 40) {
+            document.getElementById("slider-bead-n").value = val;
+          }
+          renderBeadPattern(val);
+        });
+      });
+
+      // Micro-checks Bagian 2
+      document.getElementById("btn-mc-ubin-1").addEventListener("click", () => {
+        const val = Number(document.getElementById("mc-ubin-1").value);
+        const fb = document.getElementById("fb-mc-ubin-1");
+        if (val === 28) {
+          fb.className = "text-xs font-bold text-emerald-700";
+          fb.textContent = "✅ Benar! 4(6) + 4 = 28 ubin.";
+          ubinState.mc1Done = true;
+          checkUbinCompletion();
+        } else {
+          fb.className = "text-xs font-bold text-rose-600";
+          fb.textContent = "❌ Coba hitung 4 × 6 + 4.";
+        }
+      });
+
+      document.getElementById("btn-mc-ubin-2").addEventListener("click", () => {
+        const val = document.getElementById("mc-ubin-2").value;
+        const fb = document.getElementById("fb-mc-ubin-2");
+        if (val === "Kuning") {
+          fb.className = "text-xs font-bold text-emerald-700";
+          fb.textContent = "✅ Tepat! 2026 ÷ 4 sisa 2 → Kuning.";
+          ubinState.mc2Done = true;
+          checkUbinCompletion();
+        } else {
+          fb.className = "text-xs font-bold text-rose-600";
+          fb.textContent = "❌ 2026 = 4 × 506 + 2 (sisa 2).";
+        }
+      });
+
+      /* --------------------------------------------------------------------
+         4. BAGIAN 3: STUDIO SIMULASI PERTUMBUHAN TABUNGAN
+         -------------------------------------------------------------------- */
+      const saveState = {
+        exploredWeek10: false,
+        reflectionDone: false
+      };
+
+      const savingsData = (function buildSavingsSeries() {
+        const weeks = [];
+        let sumA = 0;
+        let sumB = 0;
+        for (let w = 1; w <= 10; w++) {
+          const uA = 15000 + (w - 1) * 5000;
+          const uB = 1000 * Math.pow(2, w - 1);
+          sumA += uA;
+          sumB += uB;
+          weeks.push({ week: w, uA, sumA, uB, sumB });
+        }
+        return weeks;
+      })();
+
+      function formatRupiah(num) {
+        return "Rp" + num.toLocaleString("id-ID");
+      }
+
+      function renderSavingsStudio(selectedWeek) {
+        if (selectedWeek >= 8) {
+          saveState.exploredWeek10 = true;
+        }
+        if (saveState.exploredWeek10 && saveState.reflectionDone) {
+          progressState.tabungan = true;
+          updateProgressUI();
+        }
+
+        const item = savingsData[selectedWeek - 1];
+        document.getElementById("label-save-week").textContent = `Minggu ke-${selectedWeek}`;
+        document.querySelectorAll(".wk-num").forEach((el) => {
+          el.textContent = selectedWeek;
+        });
+
+        document.getElementById("save-a-un").textContent = formatRupiah(item.uA);
+        document.getElementById("save-a-sn").textContent = formatRupiah(item.sumA);
+        document.getElementById("save-b-un").textContent = formatRupiah(item.uB);
+        document.getElementById("save-b-sn").textContent = formatRupiah(item.sumB);
+
+        const badgeA = document.getElementById("badge-target-a");
+        if (item.sumA >= 500000) {
+          badgeA.className = "text-[11px] font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800";
+          badgeA.textContent = "✅ Target Rp500.000 Tercapai!";
+        } else {
+          badgeA.className = "text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800";
+          badgeA.textContent = "Belum Rp500.000";
+        }
+
+        const badgeB = document.getElementById("badge-target-b");
+        if (item.sumB >= 500000) {
+          badgeB.className = "text-[11px] font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800";
+          badgeB.textContent = "✅ Target Rp500.000 Tercapai!";
+        } else {
+          badgeB.className = "text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800";
+          badgeB.textContent = "Belum Rp500.000";
+        }
+
+        // Render SVG Bar Comparison Chart
+        const svg = document.getElementById("svg-savings-chart");
+        const W = 680;
+        const H = 260;
+        const padL = 62;
+        const padR = 20;
+        const padT = 22;
+        const padB = 34;
+        const chartW = W - padL - padR;
+        const chartH = H - padT - padB;
+        const maxVal = 1100000;
+
+        let markup = "";
+
+        // Horizontal grid lines & Y-axis labels
+        [0, 250000, 500000, 750000, 1000000].forEach((val) => {
+          const y = padT + chartH - (val / maxVal) * chartH;
+          const isTarget = val === 500000;
+          markup += `<line x1="${padL}" y1="${y.toFixed(1)}" x2="${W - padR}" y2="${y.toFixed(1)}" stroke="${isTarget ? "#f59e0b" : "#334155"}" stroke-width="${isTarget ? "2" : "1"}" ${isTarget ? 'stroke-dasharray="5 4"' : ""} />`;
+          markup += `<text x="${padL - 8}" y="${(y + 4).toFixed(1)}" text-anchor="end" fill="${isTarget ? "#fbbf24" : "#94a3b8"}" font-size="10" font-family="JetBrains Mono, monospace" font-weight="${isTarget ? "800" : "500"}">${val === 0 ? "0" : (val / 1000) + "rb"}</text>`;
+        });
+
+        const groupW = chartW / 10;
+        const barW = Math.min(18, (groupW - 14) / 2);
+
+        savingsData.forEach((d, idx) => {
+          const gx = padL + idx * groupW;
+          const isSel = d.week === selectedWeek;
+
+          if (isSel) {
+            markup += `<rect x="${(gx + 2).toFixed(1)}" y="${padT}" width="${(groupW - 4).toFixed(1)}" height="${chartH}" rx="6" fill="#ffffff" opacity="0.08" />`;
+          }
+
+          const hA = (d.sumA / maxVal) * chartH;
+          const yA = padT + chartH - hA;
+          const xA = gx + (groupW / 2) - barW - 2;
+
+          const hB = (d.sumB / maxVal) * chartH;
+          const yB = padT + chartH - hB;
+          const xB = gx + (groupW / 2) + 2;
+
+          markup += `<rect x="${xA.toFixed(1)}" y="${yA.toFixed(1)}" width="${barW}" height="${Math.max(2, hA).toFixed(1)}" rx="3" fill="${isSel ? "#818cf8" : "#4f46e5"}" />`;
+          markup += `<rect x="${xB.toFixed(1)}" y="${yB.toFixed(1)}" width="${barW}" height="${Math.max(2, hB).toFixed(1)}" rx="3" fill="${isSel ? "#c084fc" : "#7c3aed"}" />`;
+
+          markup += `<text x="${(gx + groupW / 2).toFixed(1)}" y="${H - 12}" text-anchor="middle" fill="${isSel ? "#fbbf24" : "#cbd5e1"}" font-size="11" font-family="JetBrains Mono, monospace" font-weight="${isSel ? "800" : "600"}">M${d.week}</text>`;
+        });
+
+        svg.innerHTML = markup;
+      }
+
+      document.getElementById("slider-save-week").addEventListener("input", (e) => {
+        renderSavingsStudio(Number(e.target.value));
+      });
+
+      document.querySelectorAll(".fin-opt-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const fb = document.getElementById("fb-fin-reflection");
+          document.querySelectorAll(".fin-opt-btn").forEach((b) => {
+            b.className = "fin-opt-btn text-left p-3 rounded-xl bg-white border border-slate-300 text-xs font-semibold text-slate-700 transition";
+          });
+
+          if (btn.dataset.finOpt === "correct") {
+            btn.className = "fin-opt-btn text-left p-3 rounded-xl bg-emerald-100 border-2 border-emerald-600 text-xs font-extrabold text-emerald-950 transition";
+            fb.className = "text-xs font-bold text-emerald-800";
+            fb.textContent = "✅ Tepat sekali! Pertumbuhan eksponensial (geometri) melonjak drastis di akhir sehingga sulit dipenuhi dengan uang saku harian/mingguan pelajar.";
+            saveState.reflectionDone = true;
+            if (saveState.exploredWeek10) {
+              progressState.tabungan = true;
+              updateProgressUI();
+            }
+          } else {
+            btn.className = "fin-opt-btn text-left p-3 rounded-xl bg-rose-50 border-2 border-rose-500 text-xs font-bold text-rose-800 transition";
+            fb.className = "text-xs font-bold text-rose-700";
+            fb.textContent = "❌ Kurang tepat. Pada minggu ke-9 dan ke-10 saldo Strategi B melampaui Strategi A, namun setoran mingguannya sangat besar.";
+          }
+        });
+      });
+
+      /* --------------------------------------------------------------------
+         5. BAGIAN 4: PAKET ASESMEN LITERASI NUMERASI (TIPE AKM / ASAS)
+         -------------------------------------------------------------------- */
+      const akmResults = {
+        q1: null, // true | false | null
+        q2: null,
+        q3: null,
+        q4: null
+      };
+
+      function updateAkmStatus() {
+        const answeredCount = Object.values(akmResults).filter((v) => v !== null).length;
+        document.getElementById("akm-summary-count").textContent = `${answeredCount} / 4`;
+
+        if (answeredCount === 4) {
+          progressState.akm = true;
+          updateProgressUI();
+        }
+      }
+
+      // Soal 1: a=16, b=4, n=10 -> U_10 = 16 + 9*4 = 52 -> S_10 = 5 * (16 + 52) = 340 -> 90% * 340 = 306 (Option A)
+      document.getElementById("btn-check-akm1").addEventListener("click", () => {
+        const picked = document.querySelector('input[name="akm-q1"]:checked');
+        const fb = document.getElementById("fb-akm1");
+        if (!picked) {
+          fb.className = "text-xs p-3.5 rounded-xl bg-amber-50 border border-amber-300 text-amber-900 font-bold";
+          fb.classList.remove("hidden");
+          fb.textContent = "⚠️ Pilih salah satu opsi A, B, C, atau D terlebih dahulu.";
+          return;
+        }
+        fb.classList.remove("hidden");
+        if (picked.value === "A") {
+          akmResults.q1 = true;
+          fb.className = "text-xs p-3.5 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-900 leading-relaxed";
+          fb.innerHTML = "✅ <strong>Benar!</strong> Pembahasan: U<sub>10</sub> = 16 + 9(4) = 52 kursi. Total kapasitas S<sub>10</sub> = 5 × (16 + 52) = 340 kursi. Maksimal tiket dijual = 90% × 340 = <strong>306 tiket</strong>.";
+        } else {
+          akmResults.q1 = false;
+          fb.className = "text-xs p-3.5 rounded-xl bg-rose-50 border border-rose-300 text-rose-900 leading-relaxed";
+          fb.innerHTML = "❌ <strong>Belum tepat.</strong> Pembahasan: Total kapasitas 10 baris adalah S<sub>10</sub> = 340 kursi, lalu dikalikan batas aman 90% × 340 = <strong>306 tiket (A)</strong>.";
+        }
+        updateAkmStatus();
+      });
+
+      // Soal 2: Benar / Salah Multi-pernyataan -> 1: B (4*4+4=20), 2: B (20*12.000=240.000), 3: S (putih=25, tepi=24 -> putih lebih banyak)
+      document.getElementById("btn-check-akm2").addEventListener("click", () => {
+        const s1 = document.querySelector('input[name="akm2-s1"]:checked');
+        const s2 = document.querySelector('input[name="akm2-s2"]:checked');
+        const s3 = document.querySelector('input[name="akm2-s3"]:checked');
+        const fb = document.getElementById("fb-akm2");
+
+        if (!s1 || !s2 || !s3) {
+          fb.classList.remove("hidden");
+          fb.className = "text-xs p-3.5 rounded-xl bg-amber-50 border border-amber-300 text-amber-900 font-bold";
+          fb.textContent = "⚠️ Pastikan ketiga baris pernyataan sudah dipilih Benar atau Salah.";
+          return;
+        }
+
+        fb.classList.remove("hidden");
+        const isAllCorrect = s1.value === "B" && s2.value === "B" && s3.value === "S";
+        if (isAllCorrect) {
+          akmResults.q2 = true;
+          fb.className = "text-xs p-3.5 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-900 leading-relaxed";
+          fb.innerHTML = "✅ <strong>Sempurna (Benar - Benar - Salah)!</strong><br/>1) Benar: 4(4)+4 = 20 ubin.<br/>2) Benar: 20 × Rp12.000 = Rp240.000.<br/>3) Salah: Pada n = 5, ubin putih = 5×5 = 25, sedangkan ubin tepi = 4(5)+4 = 24 (putih lebih banyak).";
+        } else {
+          akmResults.q2 = false;
+          fb.className = "text-xs p-3.5 rounded-xl bg-rose-50 border border-rose-300 text-rose-900 leading-relaxed";
+          fb.innerHTML = "❌ <strong>Masih ada pernyataan yang kurang tepat.</strong> Kunci yang benar: <strong>1) Benar</strong> (20 ubin), <strong>2) Benar</strong> (Rp240.000), <strong>3) Salah</strong> (25 ubin putih > 24 ubin tepi).";
+        }
+        updateAkmStatus();
+      });
+
+      // Soal 3: U_7 = 1200 + 6 * 300 = 3000
+      document.getElementById("btn-check-akm3").addEventListener("click", () => {
+        const raw = document.getElementById("akm-q3-input").value.trim();
+        const fb = document.getElementById("fb-akm3");
+        if (raw === "") {
+          fb.classList.remove("hidden");
+          fb.className = "text-xs p-3.5 rounded-xl bg-amber-50 border border-amber-300 text-amber-900 font-bold";
+          fb.textContent = "⚠️ Masukkan jawaban angkanya terlebih dahulu.";
+          return;
+        }
+        fb.classList.remove("hidden");
+        if (Number(raw) === 3000) {
+          akmResults.q3 = true;
+          fb.className = "text-xs p-3.5 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-900 leading-relaxed";
+          fb.innerHTML = "✅ <strong>Benar!</strong> Pembahasan: U<sub>7</sub> = 1.200 + (7 − 1) × 300 = 1.200 + 1.800 = <strong>3.000 meter</strong>.";
+        } else {
+          akmResults.q3 = false;
+          fb.className = "text-xs p-3.5 rounded-xl bg-rose-50 border border-rose-300 text-rose-900 leading-relaxed";
+          fb.innerHTML = "❌ <strong>Belum tepat.</strong> Pembahasan: Dari hari ke-1 ke hari ke-7 ada 6 kali kenaikan sebesar 300 m → 1.200 + (6 × 300) = <strong>3.000 meter</strong>.";
+        }
+        updateAkmStatus();
+      });
+
+      // Soal 4: Pilihan Ganda Kompleks -> A dan C
+      document.getElementById("btn-check-akm4").addEventListener("click", () => {
+        const checked = Array.from(document.querySelectorAll('input[name="akm-q4"]:checked')).map((el) => el.value);
+        const fb = document.getElementById("fb-akm4");
+
+        if (checked.length === 0) {
+          fb.classList.remove("hidden");
+          fb.className = "text-xs p-3.5 rounded-xl bg-amber-50 border border-amber-300 text-amber-900 font-bold";
+          fb.textContent = "⚠️ Centang dua pernyataan yang kamu anggap benar.";
+          return;
+        }
+
+        fb.classList.remove("hidden");
+        const isCorrect = checked.length === 2 && checked.includes("A") && checked.includes("C");
+        if (isCorrect) {
+          akmResults.q4 = true;
+          fb.className = "text-xs p-3.5 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-900 leading-relaxed";
+          fb.innerHTML = "✅ <strong>Tepat sekali (A dan C)!</strong> Dimas tertukar antara <strong>U<sub>6</sub> = 14</strong> (banyak gelas di baris ke-6) dengan <strong>S<sub>6</sub> = 54</strong> (jumlah seluruh gelas dari baris ke-1 sampai ke-6).";
+        } else {
+          akmResults.q4 = false;
+          fb.className = "text-xs p-3.5 rounded-xl bg-rose-50 border border-rose-300 text-rose-900 leading-relaxed";
+          fb.innerHTML = "❌ <strong>Belum tepat.</strong> Dua pernyataan yang benar adalah <strong>A</strong> (14 adalah U<sub>6</sub>) dan <strong>C</strong> (total seluruh gelas adalah S<sub>6</sub> = 54).";
+        }
+        updateAkmStatus();
+      });
+
+      // Show Certificate & Final Score
+      document.getElementById("btn-show-certificate").addEventListener("click", () => {
+        const correctCount = Object.values(akmResults).filter((v) => v === true).length;
+        const score = correctCount * 25;
+
+        const completedParts = Object.values(progressState).filter(Boolean).length;
+        const pct = Math.round((completedParts / 4) * 100);
+
+        document.getElementById("cert-score").textContent = score;
+        document.getElementById("cert-progress").textContent = pct + "%";
+
+        const certCard = document.getElementById("certificate-card");
+        certCard.classList.remove("hidden");
+        certCard.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+
+      /* --------------------------------------------------------------------
+         6. INITIAL RENDER ON LOAD
+         -------------------------------------------------------------------- */
+      renderAuditorium();
+      renderTileGrid(3);
+      renderBeadPattern(14);
+      renderSavingsStudio(6);
+      updateProgressUI();
+    })();
+  </script>
+</body>
+</html>
